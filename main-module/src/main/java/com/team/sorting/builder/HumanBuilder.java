@@ -10,18 +10,8 @@ public class HumanBuilder {
         this.human = human;
     }
 
-    public HumanBuilder genderMale() {
-        human.setGender(Human.Gender.MALE);
-        return this;
-    }
-
-    public HumanBuilder genderFemale() {
-        human.setGender(Human.Gender.FEMALE);
-        return this;
-    }
-
-    public HumanBuilder genderOther() {
-        human.setGender(Human.Gender.OTHER);
+    public HumanBuilder gender(Human.Gender gender) {
+        human.setGender(gender);
         return this;
     }
 
