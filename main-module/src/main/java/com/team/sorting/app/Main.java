@@ -1,91 +1,29 @@
 package com.team.sorting.app;
 
-import com.team.sorting.builder.AnimalBuilder;
-import com.team.sorting.builder.BarrelBuilder;
-import com.team.sorting.builder.HumanBuilder;
+import com.team.sorting.generator.EntityGenerator;
+import com.team.sorting.generator.GeneratorFactory;
 import com.team.sorting.model.Animal;
 import com.team.sorting.model.Barrel;
 import com.team.sorting.model.Human;
 
+import java.util.List;
+
 public class Main {
 
     public static void main(String[] args) {
-        Animal dog = new AnimalBuilder(new Animal())
-                .speciesDog()
-                .eyeBrown()
-                .furLong()
-                .eatsBun()
-                .build();
+        EntityGenerator<Animal> animalGen = GeneratorFactory.getGenerator(GeneratorFactory.EntityType.ANIMAL);
+        List<Animal> randomAnimals = animalGen.generate(5);
+        System.out.println("Animals:");
+        randomAnimals.forEach(System.out::println);
 
-        Animal cat = new AnimalBuilder(new Animal())
-                .speciesCat()
-                .eyeGreen()
-                .furShort()
-                .doesNotEatBun()
-                .build();
+        EntityGenerator<Barrel> barrelGen = GeneratorFactory.getGenerator(GeneratorFactory.EntityType.BARREL);
+        List<Barrel> randomBarrels = barrelGen.generate(5);
+        System.out.println("\nBarrels:");
+        randomBarrels.forEach(System.out::println);
 
-        Animal horse = new AnimalBuilder(new Animal())
-                .speciesHorse()
-                .eyeBlue()
-                .furCurly()
-                .doesNotEatBun()
-                .build();
-
-        Animal rabbit = new AnimalBuilder(new Animal())
-                .speciesRabbit()
-                .eyeYellow()
-                .furNone()
-                .eatsBun()
-                .build();
-
-        System.out.println(dog);
-        System.out.println(cat);
-        System.out.println(horse);
-        System.out.println(rabbit);
-
-        Barrel woodenWineBarrel = new BarrelBuilder(new Barrel())
-                .volume(200)
-                .storedWine()
-                .materialWood()
-                .build();
-
-        Barrel metalOilBarrel = new BarrelBuilder(new Barrel())
-                .volume(1000)
-                .storedOil()
-                .materialMetal()
-                .build();
-
-        Barrel plasticWaterBarrel = new BarrelBuilder(new Barrel())
-                .volume(500)
-                .storedWater()
-                .materialPlastic()
-                .build();
-
-        System.out.println(woodenWineBarrel);
-        System.out.println(metalOilBarrel);
-        System.out.println(plasticWaterBarrel);
-
-        // Примеры создания людей
-        Human male = new HumanBuilder(new Human())
-                .genderMale()
-                .age(30)
-                .lastName("Иванов")
-                .build();
-
-        Human female = new HumanBuilder(new Human())
-                .genderFemale()
-                .age(25)
-                .lastName("Петрова")
-                .build();
-
-        Human other = new HumanBuilder(new Human())
-                .genderOther()
-                .age(40)
-                .lastName("Сидоров")
-                .build();
-
-        System.out.println(male);
-        System.out.println(female);
-        System.out.println(other);
+        EntityGenerator<Human> humanGen = GeneratorFactory.getGenerator(GeneratorFactory.EntityType.HUMAN);
+        List<Human> randomHumans = humanGen.generate(5);
+        System.out.println("\nHumans:");
+        randomHumans.forEach(System.out::println);
     }
 }

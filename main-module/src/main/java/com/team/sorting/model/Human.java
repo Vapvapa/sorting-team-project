@@ -3,7 +3,7 @@ package com.team.sorting.model;
 public class Human {
 
     public enum Gender {
-        MALE, FEMALE, OTHER
+        MALE, FEMALE
     }
 
     private Gender gender;

@@ -10,73 +10,23 @@ public class AnimalBuilder {
         this.animal = animal;
     }
 
-    public AnimalBuilder speciesDog() {
-        animal.setSpecies(Animal.Species.DOG);
+    public AnimalBuilder species(Animal.Species species) {
+        animal.setSpecies(species);
         return this;
     }
 
-    public AnimalBuilder speciesCat() {
-        animal.setSpecies(Animal.Species.CAT);
+    public AnimalBuilder eyeColor(Animal.EyeColor eyeColor) {
+        animal.setEyeColor(eyeColor);
         return this;
     }
 
-    public AnimalBuilder speciesHorse() {
-        animal.setSpecies(Animal.Species.HORSE);
+    public AnimalBuilder fur(Animal.Fur fur) {
+        animal.setFur(fur);
         return this;
     }
 
-    public AnimalBuilder speciesRabbit() {
-        animal.setSpecies(Animal.Species.RABBIT);
-        return this;
-    }
-
-    public AnimalBuilder eyeBrown() {
-        animal.setEyeColor(Animal.EyeColor.BROWN);
-        return this;
-    }
-
-    public AnimalBuilder eyeBlue() {
-        animal.setEyeColor(Animal.EyeColor.BLUE);
-        return this;
-    }
-
-    public AnimalBuilder eyeGreen() {
-        animal.setEyeColor(Animal.EyeColor.GREEN);
-        return this;
-    }
-
-    public AnimalBuilder eyeYellow() {
-        animal.setEyeColor(Animal.EyeColor.YELLOW);
-        return this;
-    }
-
-    public AnimalBuilder furShort() {
-        animal.setFur(Animal.Fur.SHORT);
-        return this;
-    }
-
-    public AnimalBuilder furLong() {
-        animal.setFur(Animal.Fur.LONG);
-        return this;
-    }
-
-    public AnimalBuilder furCurly() {
-        animal.setFur(Animal.Fur.CURLY);
-        return this;
-    }
-
-    public AnimalBuilder furNone() {
-        animal.setFur(Animal.Fur.NONE);
-        return this;
-    }
-
-    public AnimalBuilder eatsBun() {
-        animal.setEatsBun(true);
-        return this;
-    }
-
-    public AnimalBuilder doesNotEatBun() {
-        animal.setEatsBun(false);
+    public AnimalBuilder eatsBun(boolean eatsBun) {
+        animal.setEatsBun(eatsBun);
         return this;
     }
 

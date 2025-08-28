@@ -15,43 +15,13 @@ public class BarrelBuilder {
         return this;
     }
 
-    public BarrelBuilder storedWater() {
-        barrel.setStoredMaterial(Barrel.StoredMaterial.WATER);
+    public BarrelBuilder storedMaterial(Barrel.StoredMaterial storedMaterial) {
+        barrel.setStoredMaterial(storedMaterial);
         return this;
     }
 
-    public BarrelBuilder storedOil() {
-        barrel.setStoredMaterial(Barrel.StoredMaterial.OIL);
-        return this;
-    }
-
-    public BarrelBuilder storedWine() {
-        barrel.setStoredMaterial(Barrel.StoredMaterial.WINE);
-        return this;
-    }
-
-    public BarrelBuilder storedBeer() {
-        barrel.setStoredMaterial(Barrel.StoredMaterial.BEER);
-        return this;
-    }
-
-    public BarrelBuilder storedHoney() {
-        barrel.setStoredMaterial(Barrel.StoredMaterial.HONEY);
-        return this;
-    }
-
-    public BarrelBuilder materialWood() {
-        barrel.setMaterial(Barrel.Material.WOOD);
-        return this;
-    }
-
-    public BarrelBuilder materialMetal() {
-        barrel.setMaterial(Barrel.Material.METAL);
-        return this;
-    }
-
-    public BarrelBuilder materialPlastic() {
-        barrel.setMaterial(Barrel.Material.PLASTIC);
+    public BarrelBuilder material(Barrel.Material material) {
+        barrel.setMaterial(material);
         return this;
     }
 
