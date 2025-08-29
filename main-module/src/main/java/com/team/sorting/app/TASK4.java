@@ -77,7 +77,7 @@ public class TASK4 {
             scan_barrels.join();
             scan_humans.join();
         } catch (InterruptedException e){
-            e.printStackTrace();
+            System.out.println("Thread not end");
         }
 
     }
