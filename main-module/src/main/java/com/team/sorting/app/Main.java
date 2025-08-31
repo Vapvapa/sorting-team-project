@@ -2,6 +2,8 @@ package com.team.sorting.app;
 
 import com.team.sorting.generator.EntityGenerator;
 import com.team.sorting.generator.GeneratorFactory;
+import com.team.sorting.loader.EntityLoader;
+import com.team.sorting.loader.LoaderFactory;
 import com.team.sorting.model.Animal;
 import com.team.sorting.model.Barrel;
 import com.team.sorting.model.Human;
@@ -25,5 +27,20 @@ public class Main {
         List<Human> randomHumans = humanGen.generate(5);
         System.out.println("\nHumans:");
         randomHumans.forEach(System.out::println);
+
+        EntityLoader<Animal> animalLoader = LoaderFactory.getLoader(LoaderFactory.EntityType.ANIMAL);
+        List<Animal> animalsFromFile = animalLoader.load("com/team/sorting/loader/testAnimalLoader.txt");
+        System.out.println("Loaded Animals:");
+        animalsFromFile.forEach(System.out::println);
+
+        EntityLoader<Barrel> barrelLoader = LoaderFactory.getLoader(LoaderFactory.EntityType.BARREL);
+        List<Barrel> barrelsFromFile = barrelLoader.load("com/team/sorting/loader/testBarrelLoader.txt");
+        System.out.println("Loaded Barrels:");
+        barrelsFromFile.forEach(System.out::println);
+
+        EntityLoader<Human> humanLoader = LoaderFactory.getLoader(LoaderFactory.EntityType.HUMAN);
+        List<Human> humanFromFile = humanLoader.load("com/team/sorting/loader/testHumanLoader.txt");
+        System.out.println("Loaded People:");
+        humanFromFile.forEach(System.out::println);
     }
 }
