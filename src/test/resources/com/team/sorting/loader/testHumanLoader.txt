@@ -1,0 +1,4 @@
+MALE, 25, MILLER
+WRONG, DATA
+Female 30? Wilson
+male: 40; brown

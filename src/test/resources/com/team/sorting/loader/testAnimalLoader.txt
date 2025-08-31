@@ -1,0 +1,4 @@
+DOG, BROWN, SHORT, true
+Cat Green, Long; False
+INVALID, DATA
+horse, blue+- long,* TRUE
