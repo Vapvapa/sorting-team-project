@@ -1,4 +1,4 @@
-package com.team.sorting.generator;
+package com.team.sorting.input.generator;
 
 import com.team.sorting.builder.AnimalBuilder;
 import com.team.sorting.model.Animal;

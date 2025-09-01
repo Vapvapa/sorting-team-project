@@ -1,15 +1,19 @@
 package com.team.sorting.loader;
 
+import com.team.sorting.input.loader.BarrelLoader;
+import com.team.sorting.input.loader.EntityLoader;
 import com.team.sorting.model.Barrel;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link BarrelLoader}.
- * Tests loading of barrels from files and parsing individual lines.
+ * Tests loading of barrels from files, including handling of invalid lines.
  */
 class BarrelLoaderTest {
 
@@ -25,26 +29,40 @@ class BarrelLoaderTest {
     }
 
     /**
-     * Tests that parsing a line with an incorrect number of fields throws IllegalArgumentException.
-     * Example: only 2 fields instead of 3.
+     * Tests that lines with an incorrect number of fields are skipped.
      */
     @Test
-    void testParseLineThrowsOnInvalidFormat() {
-        BarrelLoader loader = new BarrelLoader();
-        String invalidLine = "200,OIL"; // Only two fields instead of three
-        assertThrows(IllegalArgumentException.class, () -> loader.parseLine(invalidLine),
-                "Parsing a line with the wrong number of fields should throw IllegalArgumentException.");
+    void testLoadSkipsInvalidFormat() throws Exception {
+        Path tempFile = Files.createTempFile("invalid-format-barrel", ".txt");
+        Files.writeString(tempFile,
+                "200,OIL,WOOD\n" +     // valid
+                "300,OIL\n" +          // invalid (only 2 fields)
+                "150,WATER,STEEL\n"    // valid
+        );
+
+        EntityLoader<Barrel> loader = new BarrelLoader();
+        List<Barrel> barrels = loader.load(tempFile.toString());
+
+        assertEquals(2, barrels.size(), "Only valid lines should be loaded when some lines have wrong field count.");
+        Files.deleteIfExists(tempFile);
     }
 
     /**
-     * Tests that parsing a line with an invalid number format throws NumberFormatException.
-     * Example: first field should be an integer (volume), but it's not.
+     * Tests that lines with invalid number formats are skipped.
      */
     @Test
-    void testParseLineThrowsOnWrongNumberFormat() {
-        BarrelLoader loader = new BarrelLoader();
-        String invalidLine = "abc,OIL,WOOD"; // 'abc' is not a valid integer
-        assertThrows(NumberFormatException.class, () -> loader.parseLine(invalidLine),
-                "Parsing a line with a non-integer volume should throw NumberFormatException.");
+    void testLoadSkipsWrongNumberFormat() throws Exception {
+        Path tempFile = Files.createTempFile("invalid-number-barrel", ".txt");
+        Files.writeString(tempFile,
+                "200,OIL,WOOD\n" +    // valid
+                "abc,OIL,WOOD\n" +    // invalid (volume is not a number)
+                "150,WATER,STEEL\n"   // valid
+        );
+
+        EntityLoader<Barrel> loader = new BarrelLoader();
+        List<Barrel> barrels = loader.load(tempFile.toString());
+
+        assertEquals(2, barrels.size(), "Lines with invalid number format should be skipped.");
+        Files.deleteIfExists(tempFile);
     }
 }

@@ -1,9 +1,11 @@
 package com.team.sorting.app;
 
-import com.team.sorting.generator.EntityGenerator;
-import com.team.sorting.generator.GeneratorFactory;
-import com.team.sorting.loader.EntityLoader;
-import com.team.sorting.loader.LoaderFactory;
+import com.team.sorting.input.generator.EntityGenerator;
+import com.team.sorting.input.generator.GeneratorFactory;
+import com.team.sorting.input.inputter.EntityInputter;
+import com.team.sorting.input.inputter.InputterFactory;
+import com.team.sorting.input.loader.EntityLoader;
+import com.team.sorting.input.loader.LoaderFactory;
 import com.team.sorting.model.Animal;
 import com.team.sorting.model.Barrel;
 import com.team.sorting.model.Human;
@@ -42,5 +44,10 @@ public class Main {
         List<Human> humanFromFile = humanLoader.load("com/team/sorting/loader/testHumanLoader.txt");
         System.out.println("Loaded People:");
         humanFromFile.forEach(System.out::println);
+
+        EntityInputter<Human> humanInputter = InputterFactory.getLoader(InputterFactory.EntityType.HUMAN);
+        List<Human> humanFromConsole = humanInputter.input(1);
+        System.out.println("Read People:");
+        humanFromConsole.forEach(System.out::println);
     }
 }
