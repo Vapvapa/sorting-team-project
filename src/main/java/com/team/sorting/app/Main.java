@@ -42,11 +42,21 @@ public class Main {
 
         EntityLoader<Human> humanLoader = LoaderFactory.getLoader(LoaderFactory.EntityType.HUMAN);
         List<Human> humanFromFile = humanLoader.load("com/team/sorting/loader/testHumanLoader.txt");
-        System.out.println("Loaded People:");
+        System.out.println("Loaded Human:");
         humanFromFile.forEach(System.out::println);
 
+        EntityInputter<Animal> animalInputter = InputterFactory.getLoader(InputterFactory.EntityType.ANIMAL);
+        List<Animal> animalFromConsole = animalInputter.input(2);
+        System.out.println("Read Animals:");
+        animalFromConsole.forEach(System.out::println);
+
+        EntityInputter<Barrel> barrelInputter = InputterFactory.getLoader(InputterFactory.EntityType.BARREL);
+        List<Barrel> barrelFromConsole = barrelInputter.input(2);
+        System.out.println("Read Barrels:");
+        barrelFromConsole.forEach(System.out::println);
+
         EntityInputter<Human> humanInputter = InputterFactory.getLoader(InputterFactory.EntityType.HUMAN);
-        List<Human> humanFromConsole = humanInputter.input(1);
+        List<Human> humanFromConsole = humanInputter.input(2);
         System.out.println("Read People:");
         humanFromConsole.forEach(System.out::println);
     }
