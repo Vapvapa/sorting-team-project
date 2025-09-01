@@ -1,4 +1,0 @@
-200, OIL, WOOD
-MALFORMED
-750 Wine Metal
-500: water; plastic

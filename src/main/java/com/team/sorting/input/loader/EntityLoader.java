@@ -1,4 +1,4 @@
-package com.team.sorting.loader;
+package com.team.sorting.input.loader;
 
 import java.util.List;
 

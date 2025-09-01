@@ -1,21 +1,24 @@
 package com.team.sorting.loader;
 
+import com.team.sorting.input.loader.AnimalLoader;
+import com.team.sorting.input.loader.EntityLoader;
 import com.team.sorting.model.Animal;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the {@link AnimalLoader} class.
- * These tests verify the correctness of parsing logic and file loading functionality.
+ * These tests verify file loading and parsing behavior.
  */
 class AnimalLoaderTest {
 
     /**
      * Tests that the loader correctly reads a valid file and returns the expected number of animals.
-     * The test file contains 3 valid animal entries.
      */
     @Test
     void testLoadValidFile() {
@@ -25,26 +28,42 @@ class AnimalLoaderTest {
     }
 
     /**
-     * Tests that parsing a line with an incorrect format (e.g., wrong number of fields)
-     * throws an {@link IllegalArgumentException}.
+     * Tests that when the file contains an invalid line (wrong number of fields),
+     * the loader skips it and successfully loads the valid ones.
      */
     @Test
-    void testParseLineThrowsOnInvalidFormat() {
-        AnimalLoader loader = new AnimalLoader();
-        String invalidLine = "DOG,BROWN"; // Only two fields instead of four
-        assertThrows(IllegalArgumentException.class, () -> loader.parseLine(invalidLine),
-                "Parsing a line with incorrect format should throw IllegalArgumentException.");
+    void testLoadSkipsInvalidFormat() throws Exception {
+        Path tempFile = Files.createTempFile("invalid-format", ".txt");
+        Files.writeString(tempFile,
+                "DOG,BROWN,SHORT,true\n" + // valid
+                "DOG,BROWN\n" +            // invalid (only 2 fields)
+                "CAT,BLUE,LONG,false\n"    // valid
+        );
+
+        EntityLoader<Animal> loader = new AnimalLoader();
+        List<Animal> animals = loader.load(tempFile.toString());
+
+        assertEquals(2, animals.size(), "Only valid lines should be loaded.");
+        Files.deleteIfExists(tempFile);
     }
 
     /**
-     * Tests that parsing a line with unknown enum values or an invalid boolean value
-     * throws an {@link IllegalArgumentException}.
+     * Tests that when the file contains an invalid enum or boolean value,
+     * the loader skips that line and loads the valid ones.
      */
     @Test
-    void testParseLineThrowsOnUnknownEnumOrBoolean() {
-        AnimalLoader loader = new AnimalLoader();
-        String invalidLine = "CAT, BLUE, SHORT, YES"; // 'YES' is invalid for boolean
-        assertThrows(IllegalArgumentException.class, () -> loader.parseLine(invalidLine),
-                "Parsing a line with an unknown enum or invalid boolean should throw IllegalArgumentException.");
+    void testLoadSkipsUnknownEnumOrBoolean() throws Exception {
+        Path tempFile = Files.createTempFile("invalid-values", ".txt");
+        Files.writeString(tempFile,
+                "DOG,BROWN,SHORT,true\n" + // valid
+                "CAT,BLUE,SHORT,YES\n" +   // invalid (YES instead of true/false)
+                "HORSE,RED,LONG,false\n"   // valid
+        );
+
+        EntityLoader<Animal> loader = new AnimalLoader();
+        List<Animal> animals = loader.load(tempFile.toString());
+
+        assertEquals(2, animals.size(), "Lines with invalid enum or boolean should be skipped.");
+        Files.deleteIfExists(tempFile);
     }
 }

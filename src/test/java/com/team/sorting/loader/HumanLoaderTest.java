@@ -1,15 +1,19 @@
 package com.team.sorting.loader;
 
+import com.team.sorting.input.loader.EntityLoader;
+import com.team.sorting.input.loader.HumanLoader;
 import com.team.sorting.model.Human;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link HumanLoader}.
- * Tests loading of humans from files and parsing individual lines.
+ * Tests loading of humans from files, including handling of invalid lines.
  */
 class HumanLoaderTest {
 
@@ -25,26 +29,40 @@ class HumanLoaderTest {
     }
 
     /**
-     * Tests that parsing a line with an incorrect number of fields throws IllegalArgumentException.
-     * Example: only 2 fields instead of 3.
+     * Tests that lines with an incorrect number of fields are skipped.
      */
     @Test
-    void testParseLineThrowsOnInvalidFormat() {
-        HumanLoader loader = new HumanLoader();
-        String invalidLine = "MALE,25"; // Only two fields instead of three
-        assertThrows(IllegalArgumentException.class, () -> loader.parseLine(invalidLine),
-                "Parsing a line with the wrong number of fields should throw IllegalArgumentException.");
+    void testLoadSkipsInvalidFormat() throws Exception {
+        Path tempFile = Files.createTempFile("invalid-format-human", ".txt");
+        Files.writeString(tempFile,
+                "MALE,25,Smith\n" +     // valid
+                "FEMALE,30\n" +         // invalid (only 2 fields)
+                "FEMALE,40,Johnson\n"   // valid
+        );
+
+        EntityLoader<Human> loader = new HumanLoader();
+        List<Human> humans = loader.load(tempFile.toString());
+
+        assertEquals(2, humans.size(), "Only valid lines should be loaded when some lines have wrong field count.");
+        Files.deleteIfExists(tempFile);
     }
 
     /**
-     * Tests that parsing a line with an invalid age format throws NumberFormatException.
-     * Example: the age field should be an integer, but it's not.
+     * Tests that lines with invalid number formats (age not an integer) are skipped.
      */
     @Test
-    void testParseLineThrowsOnInvalidAge() {
-        HumanLoader loader = new HumanLoader();
-        String invalidLine = "MALE,abc,Smith"; // 'abc' is not a valid integer
-        assertThrows(NumberFormatException.class, () -> loader.parseLine(invalidLine),
-                "Parsing a line with a non-integer age should throw NumberFormatException.");
+    void testLoadSkipsInvalidAge() throws Exception {
+        Path tempFile = Files.createTempFile("invalid-age-human", ".txt");
+        Files.writeString(tempFile,
+                "MALE,25,Smith\n" +       // valid
+                "MALE,abc,Johnson\n" +    // invalid (age is not a number)
+                "FEMALE,40,White\n"       // valid
+        );
+
+        EntityLoader<Human> loader = new HumanLoader();
+        List<Human> humans = loader.load(tempFile.toString());
+
+        assertEquals(2, humans.size(), "Lines with invalid age should be skipped.");
+        Files.deleteIfExists(tempFile);
     }
 }

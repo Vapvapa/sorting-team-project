@@ -1,4 +1,4 @@
-package com.team.sorting.loader;
+package com.team.sorting.input.loader;
 
 import com.team.sorting.builder.AnimalBuilder;
 import com.team.sorting.model.Animal;
@@ -12,7 +12,7 @@ import java.util.List;
  * A loader class responsible for reading and parsing Animal objects from a file.
  * The file format is expected to be:
  * [species], [eye_color], [fur], [eats_bun]
- *
+ * <p/>
  * Example:
  * DOG, BROWN, SHORT, true
  * CAT, GREEN, LONG, false
