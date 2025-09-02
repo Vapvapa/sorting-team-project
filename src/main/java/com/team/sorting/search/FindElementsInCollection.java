@@ -1,4 +1,4 @@
-package com.team.sorting.app;
+package com.team.sorting.search;
 
 import com.team.sorting.model.Animal;
 import com.team.sorting.model.Barrel;
@@ -6,14 +6,14 @@ import com.team.sorting.model.Human;
 
 import java.util.List;
 
-public class TASK4 {
+public class FindElementsInCollection {
     //Дополнительное задание 4:
     // реализовать многопоточный метод,
     // подсчитывающий количество вхождений элемента N в коллекцию
     // и выводящий результат в консоль.
 
     // реализовать многопоточный метод
-    public static void CounterElements(List<Animal> animals, String search_in_animals,
+    public static void countersOfElements(List<Animal> animals, String search_in_animals,
                                        List<Barrel> barrels, String search_in_barrels,
                                        List<Human> humans, String search_in_humans){
         // подсчитывающий количество вхождений элемента N в коллекцию
