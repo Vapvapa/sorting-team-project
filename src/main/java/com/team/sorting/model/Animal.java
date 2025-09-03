@@ -1,13 +1,16 @@
 package com.team.sorting.model;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
- * Represents an animal entity with various characteristics including species,
- * eye color, fur type, and food preferences.
- * 
- * This class provides a model for storing and managing animal data with
- * appropriate getters and setters for all properties.
+ * Represents an animal with species, eye color, fur type, and food preferences.
  */
 public class Animal {
+
+    /**
+     * Lock to ensure thread-safe access to fields.
+     */
+    private final ReentrantLock lock = new ReentrantLock();
 
     /**
      * Enumeration of animal species supported by the system.
@@ -34,21 +37,27 @@ public class Animal {
      * The species of the animal.
      */
     private Species species;
-    
+
     /**
      * The eye color of the animal.
      */
     private EyeColor eyeColor;
-    
+
     /**
      * The type of fur the animal has.
      */
     private Fur fur;
-    
+
     /**
      * Indicates whether the animal eats buns (bread).
      */
     private boolean eatsBun;
+
+    /**
+     * Creates a new instance of {@code Animal} with default values.
+     */
+    public Animal() {
+    }
 
     /**
      * Gets the species of the animal.
@@ -56,7 +65,12 @@ public class Animal {
      * @return The species of the animal.
      */
     public Species getSpecies() {
-        return species;
+        lock.lock();
+        try {
+            return species;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -65,7 +79,12 @@ public class Animal {
      * @return The eye color of the animal.
      */
     public EyeColor getEyeColor() {
-        return eyeColor;
+        lock.lock();
+        try {
+            return eyeColor;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -74,7 +93,12 @@ public class Animal {
      * @return The fur type of the animal.
      */
     public Fur getFur() {
-        return fur;
+        lock.lock();
+        try {
+            return fur;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -83,7 +107,12 @@ public class Animal {
      * @return true if the animal eats buns, false otherwise.
      */
     public boolean isEatsBun() {
-        return eatsBun;
+        lock.lock();
+        try {
+            return eatsBun;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -92,7 +121,12 @@ public class Animal {
      * @param species The species to set for the animal.
      */
     public void setSpecies(Species species) {
-        this.species = species;
+        lock.lock();
+        try {
+            this.species = species;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -101,7 +135,12 @@ public class Animal {
      * @param eyeColor The eye color to set for the animal.
      */
     public void setEyeColor(EyeColor eyeColor) {
-        this.eyeColor = eyeColor;
+        lock.lock();
+        try {
+            this.eyeColor = eyeColor;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -110,7 +149,12 @@ public class Animal {
      * @param fur The fur type to set for the animal.
      */
     public void setFur(Fur fur) {
-        this.fur = fur;
+        lock.lock();
+        try {
+            this.fur = fur;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -119,7 +163,12 @@ public class Animal {
      * @param eatsBun true if the animal eats buns, false otherwise.
      */
     public void setEatsBun(boolean eatsBun) {
-        this.eatsBun = eatsBun;
+        lock.lock();
+        try {
+            this.eatsBun = eatsBun;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -130,11 +179,16 @@ public class Animal {
      */
     @Override
     public String toString() {
-        return "Животное: " +
-                (species != null ? species + ", " : "") +
-                (eyeColor != null ? "глаза " + eyeColor + ", " : "") +
-                (fur != null ? "шерсть " + fur + ", " : "") +
-                (eatsBun ? "любит булку, " : "не любит булку, ") +
-                "готово к жизни!";
+        lock.lock();
+        try {
+            return "Животное: " +
+                    (species != null ? species + ", " : "") +
+                    (eyeColor != null ? "глаза " + eyeColor + ", " : "") +
+                    (fur != null ? "шерсть " + fur + ", " : "") +
+                    (eatsBun ? "любит булку, " : "не любит булку, ") +
+                    "готово к жизни!";
+        } finally {
+            lock.unlock();
+        }
     }
 }
