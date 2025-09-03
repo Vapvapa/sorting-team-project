@@ -1,12 +1,10 @@
 package com.team.sorting.builder;
 
 import com.team.sorting.model.Barrel;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * A builder class for creating Barrel objects using the builder pattern.
- * 
- * This class provides a fluent interface for setting barrel properties
- * and constructing Barrel objects step by step.
+ * Builder for creating Barrel objects.
  */
 public class BarrelBuilder {
 
@@ -14,6 +12,11 @@ public class BarrelBuilder {
      * The barrel instance being built.
      */
     private final Barrel barrel;
+
+    /**
+     * Lock to ensure thread-safe access to builder methods.
+     */
+    private final ReentrantLock lock = new ReentrantLock();
 
     /**
      * Constructs a new BarrelBuilder with the specified barrel instance.
@@ -31,8 +34,13 @@ public class BarrelBuilder {
      * @return This builder instance for method chaining.
      */
     public BarrelBuilder volume(int volume) {
-        barrel.setVolume(volume);
-        return this;
+        lock.lock();
+        try {
+            barrel.setVolume(volume);
+            return this;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -42,8 +50,13 @@ public class BarrelBuilder {
      * @return This builder instance for method chaining.
      */
     public BarrelBuilder storedMaterial(Barrel.StoredMaterial storedMaterial) {
-        barrel.setStoredMaterial(storedMaterial);
-        return this;
+        lock.lock();
+        try {
+            barrel.setStoredMaterial(storedMaterial);
+            return this;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -53,8 +66,13 @@ public class BarrelBuilder {
      * @return This builder instance for method chaining.
      */
     public BarrelBuilder material(Barrel.Material material) {
-        barrel.setMaterial(material);
-        return this;
+        lock.lock();
+        try {
+            barrel.setMaterial(material);
+            return this;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -63,6 +81,11 @@ public class BarrelBuilder {
      * @return The built barrel instance.
      */
     public Barrel build() {
-        return barrel;
+        lock.lock();
+        try {
+            return barrel;
+        } finally {
+            lock.unlock();
+        }
     }
 }

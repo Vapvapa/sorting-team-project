@@ -1,12 +1,16 @@
 package com.team.sorting.model;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
- * Represents a human entity with gender, age, and last name.
- * 
- * This class provides a model for storing and managing human data with
- * appropriate getters and setters for all properties.
+ * Human with gender, age, and last name.
  */
 public class Human {
+
+    /**
+     * Lock to ensure thread-safe access to fields.
+     */
+    private final ReentrantLock lock = new ReentrantLock();
 
     /**
      * Enumeration of gender types for humans.
@@ -19,12 +23,12 @@ public class Human {
      * The gender of the human.
      */
     private Gender gender;
-    
+
     /**
      * The age of the human in years.
      */
     private int age;
-    
+
     /**
      * The last name of the human.
      */
@@ -36,7 +40,12 @@ public class Human {
      * @return The gender of the human.
      */
     public Gender getGender() {
-        return gender;
+        lock.lock();
+        try {
+            return gender;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -45,7 +54,12 @@ public class Human {
      * @return The age of the human in years.
      */
     public int getAge() {
-        return age;
+        lock.lock();
+        try {
+            return age;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -54,7 +68,12 @@ public class Human {
      * @return The last name of the human.
      */
     public String getLastName() {
-        return lastName;
+        lock.lock();
+        try {
+            return lastName;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -63,7 +82,12 @@ public class Human {
      * @param gender The gender to set for the human.
      */
     public void setGender(Gender gender) {
-        this.gender = gender;
+        lock.lock();
+        try {
+            this.gender = gender;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -72,7 +96,12 @@ public class Human {
      * @param age The age to set for the human in years.
      */
     public void setAge(int age) {
-        this.age = age;
+        lock.lock();
+        try {
+            this.age = age;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -81,7 +110,12 @@ public class Human {
      * @param lastName The last name to set for the human.
      */
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        lock.lock();
+        try {
+            this.lastName = lastName;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -92,9 +126,14 @@ public class Human {
      */
     @Override
     public String toString() {
-        return "Человек: " +
-                (gender != null ? gender + ", " : "") +
-                "возраст " + age + ", " +
-                (lastName != null ? "фамилия " + lastName : "");
+        lock.lock();
+        try {
+            return "Человек: " +
+                    (gender != null ? gender + ", " : "") +
+                    "возраст " + age + ", " +
+                    (lastName != null ? "фамилия " + lastName : "");
+        } finally {
+            lock.unlock();
+        }
     }
 }

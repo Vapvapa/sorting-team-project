@@ -1,12 +1,10 @@
 package com.team.sorting.builder;
 
 import com.team.sorting.model.Human;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * A builder class for creating Human objects using the builder pattern.
- * 
- * This class provides a fluent interface for setting human properties
- * and constructing Human objects step by step.
+ * Builder for creating Human objects.
  */
 public class HumanBuilder {
 
@@ -14,6 +12,11 @@ public class HumanBuilder {
      * The human instance being built.
      */
     private final Human human;
+
+    /**
+     * Lock to ensure thread-safe access to builder methods.
+     */
+    private final ReentrantLock lock = new ReentrantLock();
 
     /**
      * Constructs a new HumanBuilder with the specified human instance.
@@ -31,8 +34,13 @@ public class HumanBuilder {
      * @return This builder instance for method chaining.
      */
     public HumanBuilder gender(Human.Gender gender) {
-        human.setGender(gender);
-        return this;
+        lock.lock();
+        try {
+            human.setGender(gender);
+            return this;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -42,8 +50,13 @@ public class HumanBuilder {
      * @return This builder instance for method chaining.
      */
     public HumanBuilder age(int age) {
-        human.setAge(age);
-        return this;
+        lock.lock();
+        try {
+            human.setAge(age);
+            return this;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -53,8 +66,13 @@ public class HumanBuilder {
      * @return This builder instance for method chaining.
      */
     public HumanBuilder lastName(String lastName) {
-        human.setLastName(lastName);
-        return this;
+        lock.lock();
+        try {
+            human.setLastName(lastName);
+            return this;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -63,6 +81,11 @@ public class HumanBuilder {
      * @return The built human instance.
      */
     public Human build() {
-        return human;
+        lock.lock();
+        try {
+            return human;
+        } finally {
+            lock.unlock();
+        }
     }
 }

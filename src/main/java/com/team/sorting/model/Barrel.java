@@ -1,12 +1,16 @@
 package com.team.sorting.model;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
- * Represents a barrel entity with volume, stored material, and construction material.
- * 
- * This class provides a model for storing and managing barrel data with
- * appropriate getters and setters for all properties.
+ * Barrel with volume, stored material, and construction material.
  */
 public class Barrel {
+
+    /**
+     * Lock to ensure thread-safe access to fields.
+     */
+    private final ReentrantLock lock = new ReentrantLock();
 
     /**
      * Enumeration of materials that can be stored in barrels.
@@ -26,12 +30,12 @@ public class Barrel {
      * The volume of the barrel in liters.
      */
     private int volume;
-    
+
     /**
      * The material stored inside the barrel.
      */
     private StoredMaterial storedMaterial;
-    
+
     /**
      * The material used to construct the barrel.
      */
@@ -43,7 +47,12 @@ public class Barrel {
      * @return The volume of the barrel in liters.
      */
     public int getVolume() {
-        return volume;
+        lock.lock();
+        try {
+            return volume;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -52,7 +61,12 @@ public class Barrel {
      * @return The stored material in the barrel.
      */
     public StoredMaterial getStoredMaterial() {
-        return storedMaterial;
+        lock.lock();
+        try {
+            return storedMaterial;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -61,7 +75,12 @@ public class Barrel {
      * @return The construction material of the barrel.
      */
     public Material getMaterial() {
-        return material;
+        lock.lock();
+        try {
+            return material;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -70,7 +89,12 @@ public class Barrel {
      * @param volume The volume to set for the barrel in liters.
      */
     public void setVolume(int volume) {
-        this.volume = volume;
+        lock.lock();
+        try {
+            this.volume = volume;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -79,7 +103,12 @@ public class Barrel {
      * @param storedMaterial The material to store in the barrel.
      */
     public void setStoredMaterial(StoredMaterial storedMaterial) {
-        this.storedMaterial = storedMaterial;
+        lock.lock();
+        try {
+            this.storedMaterial = storedMaterial;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -88,7 +117,12 @@ public class Barrel {
      * @param material The construction material to set for the barrel.
      */
     public void setMaterial(Material material) {
-        this.material = material;
+        lock.lock();
+        try {
+            this.material = material;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -99,9 +133,14 @@ public class Barrel {
      */
     @Override
     public String toString() {
-        return "Бочка: " +
-                "объём " + volume + "л, " +
-                (storedMaterial != null ? "содержит " + storedMaterial + ", " : "") +
-                (material != null ? "материал изготовителя " + material : "");
+        lock.lock();
+        try {
+            return "Бочка: " +
+                    "объём " + volume + "л, " +
+                    (storedMaterial != null ? "содержит " + storedMaterial + ", " : "") +
+                    (material != null ? "материал изготовителя " + material : "");
+        } finally {
+            lock.unlock();
+        }
     }
 }
