@@ -1,12 +1,10 @@
 package com.team.sorting.builder;
 
 import com.team.sorting.model.Animal;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * A builder class for creating Animal objects using the builder pattern.
- * 
- * This class provides a fluent interface for setting animal properties
- * and constructing Animal objects step by step.
+ * Builder for creating Animal objects.
  */
 public class AnimalBuilder {
 
@@ -14,6 +12,11 @@ public class AnimalBuilder {
      * The animal instance being built.
      */
     private final Animal animal;
+
+    /**
+     * Lock to ensure thread-safe access to builder methods.
+     */
+    private final ReentrantLock lock = new ReentrantLock();
 
     /**
      * Constructs a new AnimalBuilder with the specified animal instance.
@@ -31,8 +34,13 @@ public class AnimalBuilder {
      * @return This builder instance for method chaining.
      */
     public AnimalBuilder species(Animal.Species species) {
-        animal.setSpecies(species);
-        return this;
+        lock.lock();
+        try {
+            animal.setSpecies(species);
+            return this;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -42,8 +50,13 @@ public class AnimalBuilder {
      * @return This builder instance for method chaining.
      */
     public AnimalBuilder eyeColor(Animal.EyeColor eyeColor) {
-        animal.setEyeColor(eyeColor);
-        return this;
+        lock.lock();
+        try {
+            animal.setEyeColor(eyeColor);
+            return this;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -53,8 +66,13 @@ public class AnimalBuilder {
      * @return This builder instance for method chaining.
      */
     public AnimalBuilder fur(Animal.Fur fur) {
-        animal.setFur(fur);
-        return this;
+        lock.lock();
+        try {
+            animal.setFur(fur);
+            return this;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -64,8 +82,13 @@ public class AnimalBuilder {
      * @return This builder instance for method chaining.
      */
     public AnimalBuilder eatsBun(boolean eatsBun) {
-        animal.setEatsBun(eatsBun);
-        return this;
+        lock.lock();
+        try {
+            animal.setEatsBun(eatsBun);
+            return this;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -74,6 +97,11 @@ public class AnimalBuilder {
      * @return The built animal instance.
      */
     public Animal build() {
-        return animal;
+        lock.lock();
+        try {
+            return animal;
+        } finally {
+            lock.unlock();
+        }
     }
 }
