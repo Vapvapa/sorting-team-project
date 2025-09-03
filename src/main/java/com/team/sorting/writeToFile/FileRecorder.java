@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 
 public class FileRecorder {
     public static <T> void writeCollectionToFile(Collection<T> collection, String filename) {
@@ -15,7 +14,7 @@ public class FileRecorder {
             }
             writer.newLine();
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Error writing to file '" + filename + "': " + e.getMessage());
         }
     }
 
@@ -24,7 +23,7 @@ public class FileRecorder {
             writer.write(value.toString());
             writer.newLine();
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Error writing to file '" + filename + "': " + e.getMessage());
         }
     }
 
@@ -32,7 +31,7 @@ public class FileRecorder {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, false))) {
             writer.write("");
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Error clearing file '" + filename + "': " + e.getMessage());
         }
     }
 }
