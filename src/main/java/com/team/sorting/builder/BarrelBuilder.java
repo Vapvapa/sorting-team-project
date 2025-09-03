@@ -4,7 +4,7 @@ import com.team.sorting.model.Barrel;
 
 /**
  * A builder class for creating Barrel objects using the builder pattern.
- * 
+ * <p>
  * This class provides a fluent interface for setting barrel properties
  * and constructing Barrel objects step by step.
  */

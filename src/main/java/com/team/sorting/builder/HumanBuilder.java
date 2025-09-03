@@ -4,7 +4,7 @@ import com.team.sorting.model.Human;
 
 /**
  * A builder class for creating Human objects using the builder pattern.
- * 
+ * <p>
  * This class provides a fluent interface for setting human properties
  * and constructing Human objects step by step.
  */

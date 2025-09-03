@@ -4,7 +4,7 @@ import com.team.sorting.model.Animal;
 
 /**
  * A builder class for creating Animal objects using the builder pattern.
- * 
+ * <p>
  * This class provides a fluent interface for setting animal properties
  * and constructing Animal objects step by step.
  */

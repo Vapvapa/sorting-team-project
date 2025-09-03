@@ -12,7 +12,7 @@ import java.util.List;
  * A loader class responsible for reading and parsing Animal objects from a file.
  * The file format is expected to be:
  * [species], [eye_color], [fur], [eats_bun]
- * <p/>
+ * <p>
  * Example:
  * DOG, BROWN, SHORT, true
  * CAT, GREEN, LONG, false
@@ -78,9 +78,9 @@ public class AnimalLoader extends AbstractLoader<Animal> {
     /**
      * Parses and validates an enum value from a string.
      *
-     * @param value   The string value to parse.
+     * @param value The string value to parse.
      * @param enumCls The enum class type.
-     * @param <T>     The enum type.
+     * @param <T> The enum type.
      * @return The parsed enum value.
      * @throws IllegalArgumentException if the value does not match any enum constant.
      */

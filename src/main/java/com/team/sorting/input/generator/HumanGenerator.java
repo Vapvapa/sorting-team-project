@@ -6,11 +6,28 @@ import com.team.sorting.model.Human;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * A generator class responsible for creating random Human objects.
+ * Each Human has a randomly selected gender, age (18–80), and last name.
+ */
 public class HumanGenerator implements EntityGenerator<Human> {
 
+    /**
+     * Random instance used for generating random values.
+     */
     private final Random random = new Random();
-    private final String[] lastNames = {"Иванов", "Петров", "Сидоров", "Кузнецов", "Морозов", "Васильев"};
 
+    /**
+     * Predefined set of last names used for generating random humans.
+     */
+    private final String[] lastNames = {"Black", "Brown", "Gray", "Green", "White"};
+
+    /**
+     * Generates a list of random Human objects.
+     *
+     * @param count The number of Human objects to generate.
+     * @return A list of randomly generated Human objects.
+     */
     @Override
     public List<Human> generate(int count) {
         return java.util.stream.IntStream.range(0, count)
@@ -28,6 +45,13 @@ public class HumanGenerator implements EntityGenerator<Human> {
                 .toList();
     }
 
+    /**
+     * Selects a random enum value from the given enum class.
+     *
+     * @param clazz The enum class to select from.
+     * @param <E> The enum type.
+     * @return A randomly selected enum value.
+     */
     private <E extends Enum<?>> E getRandomEnum(Class<E> clazz) {
         E[] values = clazz.getEnumConstants();
         return values[random.nextInt(values.length)];

@@ -5,8 +5,21 @@ import com.team.sorting.model.Animal;
 
 import java.util.Scanner;
 
+/**
+ * An inputter class responsible for reading Animal objects from the console.
+ * Users are prompted to enter species, eye color, fur type, and bun-eating preference.
+ */
 public class AnimalInputter extends AbstractInputter<Animal> {
 
+    /**
+     * Reads a single Animal object from the console.
+     * The expected format is: species, eyeColor, fur, eatsBun
+     * Example: DOG, BROWN, SHORT, true
+     *
+     * @param scanner The Scanner object used for console input.
+     * @return A new Animal object based on user input.
+     * @throws IllegalArgumentException if input values are invalid.
+     */
     @Override
     protected Animal readOne(Scanner scanner) {
         System.out.println("Enter Animal as: species eyeColor fur eatsBun (e.g., DOG BROWN SHORT true)");
@@ -29,6 +42,13 @@ public class AnimalInputter extends AbstractInputter<Animal> {
                 .build();
     }
 
+    /**
+     * Strictly parses a boolean value from a string.
+     *
+     * @param value The string to parse.
+     * @return true or false if valid.
+     * @throws IllegalArgumentException if the string is not "true" or "false".
+     */
     private boolean parseBooleanStrict(String value) {
         String normalized = value.trim().toLowerCase();
         if ("true".equals(normalized)) return true;
@@ -36,5 +56,3 @@ public class AnimalInputter extends AbstractInputter<Animal> {
         throw new IllegalArgumentException("Invalid boolean value: " + value);
     }
 }
-
-
