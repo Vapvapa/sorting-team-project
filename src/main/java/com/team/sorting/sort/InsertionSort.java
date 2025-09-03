@@ -6,13 +6,25 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Generic insertion sort implementation that sorts lists in-place.
- * Provides overloads for elements implementing {@link Comparable} and for a custom {@link Comparator}.
+ * Generic insertion sort implementation.
+ * Creates a new sorted copy of the input list using either natural ordering or a custom {@link Comparator}.
+ *
+ * @param <E> the type of elements to be sorted
  */
 public final class InsertionSort<E> implements Sort<E> {
 
+    /** Ensures thread safety for concurrent sorting calls. */
     private final ReentrantLock lock = new ReentrantLock();
 
+    /**
+     * Sorts the given list using insertion sort with the provided comparator.
+     * Returns a new sorted list without modifying the input.
+     *
+     * @param list the list to sort (may be {@code null} or empty)
+     * @param comparator the comparator used for ordering; must not be {@code null}
+     * @return a new sorted list, or the original list if null/size < 2
+     * @throws IllegalArgumentException if comparator is {@code null}
+     */
     @Override
     public List<E> sort(List<E> list, Comparator<? super E> comparator) {
         if (list == null || list.size() < 2) {
@@ -42,5 +54,3 @@ public final class InsertionSort<E> implements Sort<E> {
         }
     }
 }
-
-
