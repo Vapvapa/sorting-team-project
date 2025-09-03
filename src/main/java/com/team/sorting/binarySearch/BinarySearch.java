@@ -1,8 +1,9 @@
 package com.team.sorting.sortStrategies;
 
 import java.util.List;
+import java.util.Comparator;
 
-public class BinarySearch<T extends Comparable<T>> {
+public class BinarySearch<T extends Comparable<T>> implements Search<T> {
 
     public int search(List<T> sortedList, T key) {
         int low = 0;
