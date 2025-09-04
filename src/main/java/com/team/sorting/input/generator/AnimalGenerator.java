@@ -1,6 +1,5 @@
 package com.team.sorting.input.generator;
 
-import com.team.sorting.builder.AnimalBuilder;
 import com.team.sorting.model.Animal;
 
 import java.util.List;
@@ -32,7 +31,7 @@ public class AnimalGenerator implements EntityGenerator<Animal> {
                     Animal.Fur fur = getRandomEnum(Animal.Fur.class);
                     boolean eatsBun = random.nextBoolean();
 
-                    return new AnimalBuilder(new Animal())
+                    return new Animal.Builder()
                             .species(species)
                             .eyeColor(eyeColor)
                             .fur(fur)

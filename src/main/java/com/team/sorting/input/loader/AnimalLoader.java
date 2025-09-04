@@ -1,6 +1,5 @@
 package com.team.sorting.input.loader;
 
-import com.team.sorting.builder.AnimalBuilder;
 import com.team.sorting.model.Animal;
 
 import java.io.BufferedReader;
@@ -67,7 +66,7 @@ public class AnimalLoader extends AbstractLoader<Animal> {
         Animal.Fur fur = parseEnum(tokens[2], Animal.Fur.class);
         boolean eatsBun = parseBooleanStrict(tokens[3]);
 
-        return new AnimalBuilder(new Animal())
+        return new Animal.Builder()
                 .species(species)
                 .eyeColor(eyeColor)
                 .fur(fur)

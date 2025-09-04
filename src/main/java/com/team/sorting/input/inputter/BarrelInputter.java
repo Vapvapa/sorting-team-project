@@ -1,6 +1,5 @@
 package com.team.sorting.input.inputter;
 
-import com.team.sorting.builder.BarrelBuilder;
 import com.team.sorting.model.Barrel;
 
 import java.util.Scanner;
@@ -31,7 +30,7 @@ public class BarrelInputter extends AbstractInputter<Barrel> {
         Barrel.StoredMaterial storedMaterial = Barrel.StoredMaterial.valueOf(storedMaterialStr.trim().toUpperCase());
         Barrel.Material material = Barrel.Material.valueOf(materialStr.trim().toUpperCase());
 
-        return new BarrelBuilder(new Barrel())
+        return new Barrel.Builder()
                 .volume(volume)
                 .storedMaterial(storedMaterial)
                 .material(material)

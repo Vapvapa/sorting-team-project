@@ -1,6 +1,5 @@
 package com.team.sorting.input.generator;
 
-import com.team.sorting.builder.BarrelBuilder;
 import com.team.sorting.model.Barrel;
 
 import java.util.List;
@@ -31,7 +30,7 @@ public class BarrelGenerator implements EntityGenerator<Barrel> {
                     Barrel.StoredMaterial storedMaterial = getRandomEnum(Barrel.StoredMaterial.class);
                     Barrel.Material material = getRandomEnum(Barrel.Material.class);
 
-                    return new BarrelBuilder(new Barrel())
+                    return new Barrel.Builder()
                             .volume(volume)
                             .storedMaterial(storedMaterial)
                             .material(material)
