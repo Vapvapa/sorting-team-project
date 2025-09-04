@@ -4,8 +4,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Barrel with volume, stored material, and construction material.
+ * Implements {@link Comparable} to allow natural ordering by
+ * volume → storedMaterial → material.
  */
-public class Barrel {
+public class Barrel implements Comparable<Barrel> {
 
     /**
      * Lock to ensure thread-safe access to fields.
@@ -16,14 +18,14 @@ public class Barrel {
      * Enumeration of materials that can be stored in barrels.
      */
     public enum StoredMaterial {
-        WATER, OIL, WINE, BEER, HONEY
+        BEER, HONEY, OIL, WATER, WINE
     }
 
     /**
      * Enumeration of materials used to construct barrels.
      */
     public enum Material {
-        WOOD, METAL, PLASTIC
+        METAL, PLASTIC, WOOD
     }
 
     /**
@@ -40,6 +42,17 @@ public class Barrel {
      * The material used to construct the barrel.
      */
     private Material material;
+
+    /**
+     * Private constructor used by the {@link Builder} to create a Barrel instance.
+     *
+     * @param builder The Builder containing the configuration for this Barrel.
+     */
+    private Barrel(Builder builder) {
+        this.volume = builder.volume;
+        this.storedMaterial = builder.storedMaterial;
+        this.material = builder.material;
+    }
 
     /**
      * Gets the volume of the barrel.
@@ -126,6 +139,30 @@ public class Barrel {
     }
 
     /**
+     * Defines natural ordering:
+     * <ul>
+     *   <li>First by volume (ascending)</li>
+     *   <li>Then by stored material</li>
+     *   <li>Then by barrel material</li>
+     * </ul>
+     *
+     * @param other the other barrel to compare with
+     * @return negative if this is less, positive if greater, zero if equal
+     */
+    @Override
+    public int compareTo(Barrel other) {
+        if (other == null) return 1;
+
+        int cmp = Integer.compare(this.volume, other.volume);
+        if (cmp != 0) return cmp;
+
+        cmp = this.storedMaterial.compareTo(other.storedMaterial);
+        if (cmp != 0) return cmp;
+
+        return this.material.compareTo(other.material);
+    }
+
+    /**
      * Returns a string representation of the barrel in Russian.
      * The format includes volume, stored material, and construction material.
      *
@@ -141,6 +178,94 @@ public class Barrel {
                     (material != null ? "материал изготовителя " + material : "");
         } finally {
             lock.unlock();
+        }
+    }
+
+    /**
+     * Thread-safe Builder Inner Class for creating Barrel instances.
+     */
+    public static class Builder {
+
+        /**
+         * Lock to ensure thread-safe access to builder methods.
+         */
+        private final ReentrantLock lock = new ReentrantLock();
+
+        /**
+         * The volume to be set in the Barrel being built.
+         */
+        private int volume;
+
+        /**
+         * The stored material to be set in the Barrel being built.
+         */
+        private StoredMaterial storedMaterial;
+
+        /**
+         * The construction material to be set in the Barrel being built.
+         */
+        private Material material;
+
+        /**
+         * Sets the volume of the barrel.
+         *
+         * @param volume The volume to set in liters.
+         * @return This builder instance for method chaining.
+         */
+        public Builder volume(int volume) {
+            lock.lock();
+            try {
+                this.volume = volume;
+                return this;
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        /**
+         * Sets the stored material of the barrel.
+         *
+         * @param storedMaterial The material to store.
+         * @return This builder instance for method chaining.
+         */
+        public Builder storedMaterial(StoredMaterial storedMaterial) {
+            lock.lock();
+            try {
+                this.storedMaterial = storedMaterial;
+                return this;
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        /**
+         * Sets the construction material of the barrel.
+         *
+         * @param material The construction material to set.
+         * @return This builder instance for method chaining.
+         */
+        public Builder material(Material material) {
+            lock.lock();
+            try {
+                this.material = material;
+                return this;
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        /**
+         * Builds a new Barrel instance with the configured fields.
+         *
+         * @return A new Barrel object.
+         */
+        public Barrel build() {
+            lock.lock();
+            try {
+                return new Barrel(this);
+            } finally {
+                lock.unlock();
+            }
         }
     }
 }

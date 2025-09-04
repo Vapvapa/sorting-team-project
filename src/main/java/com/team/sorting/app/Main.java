@@ -60,8 +60,19 @@ public class Main {
 //        System.out.println("\nRead People:");
 //        humanFromConsole.forEach(System.out::println);
 
-        List<Human> humanSorter = new InsertionSort<Human>().sort(randomHumans, Comparator.comparingInt(Human::getAge));
-        System.out.println("\nHumans sorted by age:");
-        humanSorter.forEach(System.out::println);
+        InsertionSort<Animal> sorter = new InsertionSort<>();
+        List<Animal> sortedAnimals = sorter.sort(randomAnimals, Comparator.naturalOrder());
+        System.out.println("\nSorted animals:");
+        sortedAnimals.forEach(System.out::println);
+
+        InsertionSort<Barrel> barrelSorter = new InsertionSort<>();
+        List<Barrel> sortedBarrels = barrelSorter.sort(randomBarrels, Comparator.naturalOrder());
+        System.out.println("\nSorted barrels:");
+        sortedBarrels.forEach(System.out::println);
+
+        InsertionSort<Human> humanSorter = new InsertionSort<>();
+        List<Human> sortedHumans = humanSorter.sort(randomHumans, Comparator.naturalOrder());
+        System.out.println("\nSorted humans:");
+        sortedHumans.forEach(System.out::println);
     }
 }

@@ -1,6 +1,5 @@
 package com.team.sorting.input.inputter;
 
-import com.team.sorting.builder.HumanBuilder;
 import com.team.sorting.model.Human;
 
 import java.util.Scanner;
@@ -30,7 +29,7 @@ public class HumanInputter extends AbstractInputter<Human> {
 
         Human.Gender gender = Human.Gender.valueOf(genderStr.trim().toUpperCase());
 
-        return new HumanBuilder(new Human())
+        return new Human.Builder()
                 .gender(gender)
                 .age(age)
                 .lastName(lastName)

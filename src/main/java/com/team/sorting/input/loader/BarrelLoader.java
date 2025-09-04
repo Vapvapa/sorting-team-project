@@ -1,6 +1,5 @@
 package com.team.sorting.input.loader;
 
-import com.team.sorting.builder.BarrelBuilder;
 import com.team.sorting.model.Barrel;
 
 import java.io.BufferedReader;
@@ -66,7 +65,7 @@ public class BarrelLoader extends AbstractLoader<Barrel> {
         Barrel.StoredMaterial storedMaterial = Barrel.StoredMaterial.valueOf(tokens[1].trim().toUpperCase());
         Barrel.Material material = Barrel.Material.valueOf(tokens[2].trim().toUpperCase());
 
-        return new BarrelBuilder(new Barrel())
+        return new Barrel.Builder()
                 .volume(volume)
                 .storedMaterial(storedMaterial)
                 .material(material)

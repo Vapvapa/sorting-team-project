@@ -1,6 +1,5 @@
 package com.team.sorting.input.generator;
 
-import com.team.sorting.builder.HumanBuilder;
 import com.team.sorting.model.Human;
 
 import java.util.List;
@@ -33,10 +32,10 @@ public class HumanGenerator implements EntityGenerator<Human> {
         return java.util.stream.IntStream.range(0, count)
                 .mapToObj(i -> {
                     Human.Gender gender = getRandomEnum(Human.Gender.class);
-                    int age = 18 + random.nextInt(63);
+                    int age = 18 + random.nextInt(63); // 18–80
                     String lastName = lastNames[random.nextInt(lastNames.length)];
 
-                    return new HumanBuilder(new Human())
+                    return new Human.Builder()
                             .gender(gender)
                             .age(age)
                             .lastName(lastName)

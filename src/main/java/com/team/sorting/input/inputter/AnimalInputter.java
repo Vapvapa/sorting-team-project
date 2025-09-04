@@ -1,6 +1,5 @@
 package com.team.sorting.input.inputter;
 
-import com.team.sorting.builder.AnimalBuilder;
 import com.team.sorting.model.Animal;
 
 import java.util.Scanner;
@@ -34,7 +33,7 @@ public class AnimalInputter extends AbstractInputter<Animal> {
         Animal.Fur fur = Animal.Fur.valueOf(furStr.trim().toUpperCase());
         boolean eatsBun = parseBooleanStrict(eatsBunStr);
 
-        return new AnimalBuilder(new Animal())
+        return new Animal.Builder()
                 .species(species)
                 .eyeColor(eyeColor)
                 .fur(fur)

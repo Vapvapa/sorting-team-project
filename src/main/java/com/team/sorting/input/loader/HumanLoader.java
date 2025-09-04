@@ -1,6 +1,5 @@
 package com.team.sorting.input.loader;
 
-import com.team.sorting.builder.HumanBuilder;
 import com.team.sorting.model.Human;
 
 import java.io.BufferedReader;
@@ -67,7 +66,7 @@ public class HumanLoader extends AbstractLoader<Human> {
         int age = Integer.parseInt(tokens[1].trim());
         String lastName = tokens[2].trim();
 
-        return new HumanBuilder(new Human())
+        return new Human.Builder()
                 .gender(gender)
                 .age(age)
                 .lastName(lastName)

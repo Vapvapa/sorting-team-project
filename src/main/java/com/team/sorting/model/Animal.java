@@ -4,8 +4,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Represents an animal with species, eye color, fur type, and food preferences.
+ * Implements {@link Comparable} to allow natural ordering by
+ * species → eyeColor → fur.
  */
-public class Animal {
+public class Animal implements Comparable<Animal> {
 
     /**
      * Lock to ensure thread-safe access to fields.
@@ -16,14 +18,14 @@ public class Animal {
      * Enumeration of animal species supported by the system.
      */
     public enum Species {
-        DOG, CAT, HORSE, RABBIT
+        CAT, DOG, HORSE, RABBIT
     }
 
     /**
      * Enumeration of possible eye colors for animals.
      */
     public enum EyeColor {
-        BROWN, BLUE, GREEN, YELLOW
+        BLUE, BROWN, GREEN, YELLOW
     }
 
     /**
@@ -54,9 +56,15 @@ public class Animal {
     private boolean eatsBun;
 
     /**
-     * Creates a new instance of {@code Animal} with default values.
+     * Private constructor used by the {@link Builder} to create an Animal instance.
+     *
+     * @param builder The Builder containing the configuration for this Animal.
      */
-    public Animal() {
+    private Animal(Builder builder) {
+        this.species = builder.species;
+        this.eyeColor = builder.eyeColor;
+        this.fur = builder.fur;
+        this.eatsBun = builder.eatsBun;
     }
 
     /**
@@ -106,7 +114,7 @@ public class Animal {
      *
      * @return true if the animal eats buns, false otherwise.
      */
-    public boolean isEatsBun() {
+    public boolean getEatsBun() {
         lock.lock();
         try {
             return eatsBun;
@@ -172,6 +180,34 @@ public class Animal {
     }
 
     /**
+     * Defines natural ordering:
+     * <ul>
+     *   <li>First by species</li>
+     *   <li>Then by eye color</li>
+     *   <li>Then by fur</li>
+     *   <li>Then by eats bun</li>
+     * </ul>
+     *
+     * @param other the other animal to compare with
+     * @return negative if this is less, positive if greater, zero if equal
+     */
+    @Override
+    public int compareTo(Animal other) {
+        if (other == null) return 1;
+
+        int cmp = this.species.compareTo(other.species);
+        if (cmp != 0) return cmp;
+
+        cmp = this.eyeColor.compareTo(other.eyeColor);
+        if (cmp != 0) return cmp;
+
+        cmp = this.fur.compareTo(other.fur);
+        if (cmp != 0) return cmp;
+
+        return Boolean.compare(this.eatsBun, other.eatsBun);
+    }
+
+    /**
      * Returns a string representation of the animal in Russian.
      * The format includes all the animal's characteristics in a readable format.
      *
@@ -189,6 +225,115 @@ public class Animal {
                     "готово к жизни!";
         } finally {
             lock.unlock();
+        }
+    }
+
+    /**
+     * Thread-safe Builder Inner Class for creating Animal instances.
+     */
+    public static class Builder {
+
+        /**
+         * Lock to ensure thread-safe access to builder methods.
+         */
+        private final ReentrantLock lock = new ReentrantLock();
+
+        /**
+         * The species to be set in the Animal being built.
+         */
+        private Species species;
+
+        /**
+         * The eye color to be set in the Animal being built.
+         */
+        private EyeColor eyeColor;
+
+        /**
+         * The fur type to be set in the Animal being built.
+         */
+        private Fur fur;
+
+        /**
+         * Whether the Animal eats buns to be set in the Animal being built.
+         */
+        private boolean eatsBun;
+
+        /**
+         * Sets the species of the animal.
+         *
+         * @param species The species to set.
+         * @return This builder instance for method chaining.
+         */
+        public Builder species(Species species) {
+            lock.lock();
+            try {
+                this.species = species;
+                return this;
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        /**
+         * Sets the eye color of the animal.
+         *
+         * @param eyeColor The eye color to set.
+         * @return This builder instance for method chaining.
+         */
+        public Builder eyeColor(EyeColor eyeColor) {
+            lock.lock();
+            try {
+                this.eyeColor = eyeColor;
+                return this;
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        /**
+         * Sets the fur type of the animal.
+         *
+         * @param fur The fur type to set.
+         * @return This builder instance for method chaining.
+         */
+        public Builder fur(Fur fur) {
+            lock.lock();
+            try {
+                this.fur = fur;
+                return this;
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        /**
+         * Sets whether the animal eats buns.
+         *
+         * @param eatsBun true if the animal eats buns, false otherwise.
+         * @return This builder instance for method chaining.
+         */
+        public Builder eatsBun(boolean eatsBun) {
+            lock.lock();
+            try {
+                this.eatsBun = eatsBun;
+                return this;
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        /**
+         * Builds a new Animal instance with the configured fields.
+         *
+         * @return A new Animal object.
+         */
+        public Animal build() {
+            lock.lock();
+            try {
+                return new Animal(this);
+            } finally {
+                lock.unlock();
+            }
         }
     }
 }
