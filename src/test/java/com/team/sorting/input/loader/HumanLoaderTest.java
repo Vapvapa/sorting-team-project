@@ -1,7 +1,5 @@
-package com.team.sorting.loader;
+package com.team.sorting.input.loader;
 
-import com.team.sorting.input.loader.EntityLoader;
-import com.team.sorting.input.loader.HumanLoader;
 import com.team.sorting.model.Human;
 import org.junit.jupiter.api.Test;
 

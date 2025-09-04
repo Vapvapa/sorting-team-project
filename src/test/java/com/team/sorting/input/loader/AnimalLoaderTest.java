@@ -1,7 +1,5 @@
-package com.team.sorting.loader;
+package com.team.sorting.input.loader;
 
-import com.team.sorting.input.loader.AnimalLoader;
-import com.team.sorting.input.loader.EntityLoader;
 import com.team.sorting.model.Animal;
 import org.junit.jupiter.api.Test;
 
