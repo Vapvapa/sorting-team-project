@@ -3,18 +3,13 @@ package com.team.sorting.input.generator;
 import com.team.sorting.model.Human;
 
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A generator class responsible for creating random Human objects.
  * Each Human has a randomly selected gender, age (18–80), and last name.
  */
 public class HumanGenerator implements EntityGenerator<Human> {
-
-    /**
-     * Random instance used for generating random values.
-     */
-    private final Random random = new Random();
 
     /**
      * Predefined set of last names used for generating random humans.
@@ -32,8 +27,8 @@ public class HumanGenerator implements EntityGenerator<Human> {
         return java.util.stream.IntStream.range(0, count)
                 .mapToObj(i -> {
                     Human.Gender gender = getRandomEnum(Human.Gender.class);
-                    int age = 18 + random.nextInt(63); // 18–80
-                    String lastName = lastNames[random.nextInt(lastNames.length)];
+                    int age = 18 + ThreadLocalRandom.current().nextInt(63); // 18–80
+                    String lastName = lastNames[ThreadLocalRandom.current().nextInt(lastNames.length)];
 
                     return new Human.Builder()
                             .gender(gender)
@@ -53,6 +48,6 @@ public class HumanGenerator implements EntityGenerator<Human> {
      */
     private <E extends Enum<?>> E getRandomEnum(Class<E> clazz) {
         E[] values = clazz.getEnumConstants();
-        return values[random.nextInt(values.length)];
+        return values[ThreadLocalRandom.current().nextInt(values.length)];
     }
 }

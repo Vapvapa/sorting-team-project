@@ -3,18 +3,13 @@ package com.team.sorting.input.generator;
 import com.team.sorting.model.Animal;
 
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A generator class responsible for creating random Animal objects.
  * Each Animal has a randomly selected species, eye color, fur type, and bun-eating preference.
  */
 public class AnimalGenerator implements EntityGenerator<Animal> {
-
-    /**
-     * Random instance used for generating random values.
-     */
-    private final Random random = new Random();
 
     /**
      * Generates a list of random Animal objects.
@@ -29,7 +24,7 @@ public class AnimalGenerator implements EntityGenerator<Animal> {
                     Animal.Species species = getRandomEnum(Animal.Species.class);
                     Animal.EyeColor eyeColor = getRandomEnum(Animal.EyeColor.class);
                     Animal.Fur fur = getRandomEnum(Animal.Fur.class);
-                    boolean eatsBun = random.nextBoolean();
+                    boolean eatsBun = ThreadLocalRandom.current().nextBoolean();
 
                     return new Animal.Builder()
                             .species(species)
@@ -50,6 +45,6 @@ public class AnimalGenerator implements EntityGenerator<Animal> {
      */
     private <E extends Enum<?>> E getRandomEnum(Class<E> clazz) {
         E[] values = clazz.getEnumConstants();
-        return values[random.nextInt(values.length)];
+        return values[ThreadLocalRandom.current().nextInt(values.length)];
     }
 }
