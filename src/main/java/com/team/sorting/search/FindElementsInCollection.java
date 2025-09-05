@@ -6,78 +6,95 @@ import com.team.sorting.model.Human;
 
 import java.util.List;
 
+/**
+ * Utility class for searching elements in different collections.
+ * <p>
+ * Additional Task 4:
+ * Implement a multithreaded method that counts the number of occurrences
+ * of a given element in collections and prints the result to the console.
+ */
 public class FindElementsInCollection {
-    //Дополнительное задание 4:
-    // реализовать многопоточный метод,
-    // подсчитывающий количество вхождений элемента N в коллекцию
-    // и выводящий результат в консоль.
 
-    // реализовать многопоточный метод
-    public static void countersOfElements(List<Animal> animals, String search_in_animals,
-                                       List<Barrel> barrels, String search_in_barrels,
-                                       List<Human> humans, String search_in_humans){
-        // подсчитывающий количество вхождений элемента N в коллекцию
-        //animals
-        Thread scan_animals= new Thread(new Runnable() {
-            int animals_counter=0;
+    /**
+     * Counts the number of occurrences of a given search element
+     * in {@link Animal}, {@link Barrel}, and {@link Human} collections.
+     * Each collection is scanned in a separate thread.
+     *
+     * @param animals          the list of {@link Animal} objects
+     * @param searchInAnimals  the search value for animals
+     * @param barrels          the list of {@link Barrel} objects
+     * @param searchInBarrels  the search value for barrels
+     * @param humans           the list of {@link Human} objects
+     * @param searchInHumans   the search value for humans
+     */
+    public static void countersOfElements(List<Animal> animals, String searchInAnimals,
+                                          List<Barrel> barrels, String searchInBarrels,
+                                          List<Human> humans, String searchInHumans) {
+
+        // Thread for scanning animals
+        Thread scanAnimals = new Thread(new Runnable() {
+            int animalsCounter = 0;
+
             @Override
             public void run() {
-                for (Animal animal:animals){
-                    if (animal.getEyeColor().toString().equals(search_in_animals) ||
-                            animal.getFur().toString().equals(search_in_animals) ||
-                            animal.getSpecies().toString().equals(search_in_animals)){
-                        animals_counter++;
+                for (Animal animal : animals) {
+                    if (animal.getEyeColor().toString().equals(searchInAnimals) ||
+                            animal.getFur().toString().equals(searchInAnimals) ||
+                            animal.getSpecies().toString().equals(searchInAnimals) ||
+                            animal.getEatsBun() == Boolean.parseBoolean(searchInAnimals)) {
+                        animalsCounter++;
                     }
                 }
-                //результат в консоль.
-                System.out.println("Animal with "+search_in_animals+" : "+animals_counter);
-            }
-        });
-        //barrels
-        Thread scan_barrels= new Thread(new Runnable() {
-            int barrels_counter=0;
-            @Override
-            public void run() {
-                for (Barrel barrel:barrels){
-                    if (barrel.getMaterial().toString().equals(search_in_barrels) ||
-                            barrel.getStoredMaterial().toString().equals(search_in_barrels) ||
-                            Integer.toString(barrel.getVolume()).equals(search_in_barrels)){
-                        barrels_counter++;
-                    }
-                }
-                //результат в консоль.
-                System.out.println("Barret with "+search_in_barrels+" : "+barrels_counter);
-            }
-        });
-        //humans
-        Thread scan_humans= new Thread(new Runnable() {
-            int humans_counter=0;
-            @Override
-            public void run() {
-                for (Human human:humans){
-                    if (human.getGender().toString().equals(search_in_humans) ||
-                            human.getLastName().equals(search_in_humans) ||
-                            Integer.toString(human.getAge()).equals(search_in_humans)){
-                        humans_counter++;
-                    }
-                }
-                //результат в консоль.
-                System.out.println("Human with "+search_in_humans+" : "+humans_counter);
+                System.out.println("Animals with " + searchInAnimals + " : " + animalsCounter);
             }
         });
 
-        //start
-        scan_animals.start();
-        scan_barrels.start();
-        scan_humans.start();
+        // Thread for scanning barrels
+        Thread scanBarrels = new Thread(new Runnable() {
+            int barrelsCounter = 0;
 
-        try{
-            scan_animals.join();
-            scan_barrels.join();
-            scan_humans.join();
-        } catch (InterruptedException e){
-            System.out.println("Thread not end");
+            @Override
+            public void run() {
+                for (Barrel barrel : barrels) {
+                    if (barrel.getMaterial().toString().equals(searchInBarrels) ||
+                            barrel.getStoredMaterial().toString().equals(searchInBarrels) ||
+                            Integer.toString(barrel.getVolume()).equals(searchInBarrels)) {
+                        barrelsCounter++;
+                    }
+                }
+                System.out.println("Barrels with " + searchInBarrels + " : " + barrelsCounter);
+            }
+        });
+
+        // Thread for scanning humans
+        Thread scanHumans = new Thread(new Runnable() {
+            int humansCounter = 0;
+
+            @Override
+            public void run() {
+                for (Human human : humans) {
+                    if (human.getGender().toString().equals(searchInHumans) ||
+                            human.getLastName().equals(searchInHumans) ||
+                            Integer.toString(human.getAge()).equals(searchInHumans)) {
+                        humansCounter++;
+                    }
+                }
+                System.out.println("Humans with " + searchInHumans + " : " + humansCounter);
+            }
+        });
+
+        // Start all threads
+        scanAnimals.start();
+        scanBarrels.start();
+        scanHumans.start();
+
+        // Wait for all threads to finish
+        try {
+            scanAnimals.join();
+            scanBarrels.join();
+            scanHumans.join();
+        } catch (InterruptedException e) {
+            System.out.println("Thread execution was interrupted");
         }
-
     }
 }

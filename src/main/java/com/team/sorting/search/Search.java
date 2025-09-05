@@ -1,4 +1,4 @@
-package com.team.sorting.binarySearch;
+package com.team.sorting.search;
 
 import java.util.List;
 
