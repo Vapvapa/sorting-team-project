@@ -9,6 +9,12 @@ import java.nio.file.Path;
 
 /**
  * Base class for entity loaders. It removes code duplication for file reading.
+ * <p>
+ * <b>Thread safety:</b> this class is <b>not fully thread-safe</b> for concurrent use on the same file or
+ * shared BufferedReader instances. Each call to {@link #getBufferedReader(String)}
+ * returns a new BufferedReader, so separate threads should use their own reader
+ * instances. Additionally, the thread-safety of {@link #parseLine(String)} depends
+ * on its concrete implementation and any shared mutable state it may access.
  */
 public abstract class AbstractLoader<T> implements EntityLoader<T> {
 

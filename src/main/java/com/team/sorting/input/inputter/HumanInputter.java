@@ -3,36 +3,54 @@ package com.team.sorting.input.inputter;
 import com.team.sorting.model.Human;
 
 import java.util.Scanner;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * An inputter class responsible for reading Human objects from the console.
+ * An inputter class responsible for reading {@link Human} objects from the console.
  * Users are prompted to enter gender, age, and last name.
+ * <p>
+ * <b>Thread safety:</b> this class is <b>not fully thread-safe</b> for concurrent console input
+ * because {@link System#in} is shared across all threads. The {@link ReentrantLock consoleLock}
+ * ensures that only one thread at a time reads from the console, preventing input corruption.
+ * However, calling {@link #readOne(Scanner)} from multiple threads simultaneously may still
+ * block other threads until the current input is completed. The creation of Human objects
+ * themselves is thread-safe, as each thread creates its own object.
  */
 public class HumanInputter extends AbstractInputter<Human> {
 
     /**
-     * Reads a single Human object from the console.
+     * Lock to ensure thread-safe console input.
+     */
+    private static final ReentrantLock consoleLock = new ReentrantLock();
+
+    /**
+     * Reads a single {@link Human} object from the console.
      * The expected format is: gender, age, lastName
-     * Example: MALE, 25, Smith
+     * Example: MALE 25 Smith
      *
-     * @param scanner The Scanner object used for console input.
+     * @param scanner The {@link Scanner} object used for console input.
      * @return A new Human object based on user input.
      * @throws IllegalArgumentException if input values are invalid.
      */
     @Override
     protected Human readOne(Scanner scanner) {
-        System.out.println("Enter Human as: gender age lastName (e.g., MALE 25 Smith)");
+        consoleLock.lock();
+        try {
+            System.out.println("Enter Human as: gender age lastName (e.g., MALE 25 Smith)");
 
-        String genderStr = scanner.next();
-        int age = Integer.parseInt(scanner.next());
-        String lastName = scanner.next();
+            String genderStr = scanner.next();
+            int age = Integer.parseInt(scanner.next());
+            String lastName = scanner.next();
 
-        Human.Gender gender = Human.Gender.valueOf(genderStr.trim().toUpperCase());
+            Human.Gender gender = Human.Gender.valueOf(genderStr.trim().toUpperCase());
 
-        return new Human.Builder()
-                .gender(gender)
-                .age(age)
-                .lastName(lastName)
-                .build();
+            return new Human.Builder()
+                    .gender(gender)
+                    .age(age)
+                    .lastName(lastName)
+                    .build();
+        } finally {
+            consoleLock.unlock();
+        }
     }
 }

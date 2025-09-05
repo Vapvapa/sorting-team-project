@@ -2,13 +2,26 @@ package com.team.sorting.input.inputter;
 
 import com.team.sorting.model.Animal;
 
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.Scanner;
 
 /**
- * An inputter class responsible for reading Animal objects from the console.
+ * An inputter class responsible for reading {@link Animal} objects from the console.
  * Users are prompted to enter species, eye color, fur type, and bun-eating preference.
+ * <p>
+ * <b>Thread safety:</b> this class is <b>not fully thread-safe</b> for concurrent console input
+ * because {@link System#in} is shared across all threads. The {@link ReentrantLock consoleLock}
+ * ensures that only one thread at a time reads from the console, preventing input corruption.
+ * However, calling {@link #readOne(Scanner)} from multiple threads simultaneously may still
+ * block other threads until the current input is completed. The creation of Animal objects
+ * themselves is thread-safe, as each thread creates its own object.
  */
 public class AnimalInputter extends AbstractInputter<Animal> {
+
+    /**
+     * Lock to ensure thread-safe console input.
+     */
+    private static final ReentrantLock consoleLock = new ReentrantLock();
 
     /**
      * Reads a single Animal object from the console.
@@ -21,24 +34,29 @@ public class AnimalInputter extends AbstractInputter<Animal> {
      */
     @Override
     protected Animal readOne(Scanner scanner) {
-        System.out.println("Enter Animal as: species eyeColor fur eatsBun (e.g., DOG BROWN SHORT true)");
+        consoleLock.lock();
+        try {
+            System.out.println("Enter Animal as: species eyeColor fur eatsBun (e.g., DOG BROWN SHORT true)");
 
-        String speciesStr = scanner.next();
-        String eyeColorStr = scanner.next();
-        String furStr = scanner.next();
-        String eatsBunStr = scanner.next();
+            String speciesStr = scanner.next();
+            String eyeColorStr = scanner.next();
+            String furStr = scanner.next();
+            String eatsBunStr = scanner.next();
 
-        Animal.Species species = Animal.Species.valueOf(speciesStr.trim().toUpperCase());
-        Animal.EyeColor eyeColor = Animal.EyeColor.valueOf(eyeColorStr.trim().toUpperCase());
-        Animal.Fur fur = Animal.Fur.valueOf(furStr.trim().toUpperCase());
-        boolean eatsBun = parseBooleanStrict(eatsBunStr);
+            Animal.Species species = Animal.Species.valueOf(speciesStr.trim().toUpperCase());
+            Animal.EyeColor eyeColor = Animal.EyeColor.valueOf(eyeColorStr.trim().toUpperCase());
+            Animal.Fur fur = Animal.Fur.valueOf(furStr.trim().toUpperCase());
+            boolean eatsBun = parseBooleanStrict(eatsBunStr);
 
-        return new Animal.Builder()
-                .species(species)
-                .eyeColor(eyeColor)
-                .fur(fur)
-                .eatsBun(eatsBun)
-                .build();
+            return new Animal.Builder()
+                    .species(species)
+                    .eyeColor(eyeColor)
+                    .fur(fur)
+                    .eatsBun(eatsBun)
+                    .build();
+        } finally {
+            consoleLock.unlock();
+        }
     }
 
     /**

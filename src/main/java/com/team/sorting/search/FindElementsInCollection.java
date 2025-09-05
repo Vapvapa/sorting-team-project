@@ -31,56 +31,49 @@ public class FindElementsInCollection {
                                           List<Barrel> barrels, String searchInBarrels,
                                           List<Human> humans, String searchInHumans) {
 
-        // Thread for scanning animals
-        Thread scanAnimals = new Thread(new Runnable() {
-            int animalsCounter = 0;
+        // Creating immutable copies of collections for thread-safe reading
+        List<Animal> animalsCopy = List.copyOf(animals);
+        List<Barrel> barrelsCopy = List.copyOf(barrels);
+        List<Human> humansCopy = List.copyOf(humans);
 
-            @Override
-            public void run() {
-                for (Animal animal : animals) {
-                    if (animal.getEyeColor().toString().equals(searchInAnimals) ||
-                            animal.getFur().toString().equals(searchInAnimals) ||
-                            animal.getSpecies().toString().equals(searchInAnimals) ||
-                            animal.getEatsBun() == Boolean.parseBoolean(searchInAnimals)) {
-                        animalsCounter++;
-                    }
+        // Thread for scanning animals
+        Thread scanAnimals = new Thread(() -> {
+            int animalsCounter = 0;
+            for (Animal animal : animalsCopy) {
+                if (animal.getEyeColor().toString().equals(searchInAnimals) ||
+                        animal.getFur().toString().equals(searchInAnimals) ||
+                        animal.getSpecies().toString().equals(searchInAnimals) ||
+                        animal.getEatsBun() == Boolean.parseBoolean(searchInAnimals)) {
+                    animalsCounter++;
                 }
-                System.out.println("Animals with " + searchInAnimals + " : " + animalsCounter);
             }
+            System.out.println("Animals with " + searchInAnimals + " : " + animalsCounter);
         });
 
         // Thread for scanning barrels
-        Thread scanBarrels = new Thread(new Runnable() {
+        Thread scanBarrels = new Thread(() -> {
             int barrelsCounter = 0;
-
-            @Override
-            public void run() {
-                for (Barrel barrel : barrels) {
-                    if (barrel.getMaterial().toString().equals(searchInBarrels) ||
-                            barrel.getStoredMaterial().toString().equals(searchInBarrels) ||
-                            Integer.toString(barrel.getVolume()).equals(searchInBarrels)) {
-                        barrelsCounter++;
-                    }
+            for (Barrel barrel : barrelsCopy) {
+                if (barrel.getMaterial().toString().equals(searchInBarrels) ||
+                        barrel.getStoredMaterial().toString().equals(searchInBarrels) ||
+                        Integer.toString(barrel.getVolume()).equals(searchInBarrels)) {
+                    barrelsCounter++;
                 }
-                System.out.println("Barrels with " + searchInBarrels + " : " + barrelsCounter);
             }
+            System.out.println("Barrels with " + searchInBarrels + " : " + barrelsCounter);
         });
 
         // Thread for scanning humans
-        Thread scanHumans = new Thread(new Runnable() {
+        Thread scanHumans = new Thread(() -> {
             int humansCounter = 0;
-
-            @Override
-            public void run() {
-                for (Human human : humans) {
-                    if (human.getGender().toString().equals(searchInHumans) ||
-                            human.getLastName().equals(searchInHumans) ||
-                            Integer.toString(human.getAge()).equals(searchInHumans)) {
-                        humansCounter++;
-                    }
+            for (Human human : humansCopy) {
+                if (human.getGender().toString().equals(searchInHumans) ||
+                        human.getLastName().equals(searchInHumans) ||
+                        Integer.toString(human.getAge()).equals(searchInHumans)) {
+                    humansCounter++;
                 }
-                System.out.println("Humans with " + searchInHumans + " : " + humansCounter);
             }
+            System.out.println("Humans with " + searchInHumans + " : " + humansCounter);
         });
 
         // Start all threads

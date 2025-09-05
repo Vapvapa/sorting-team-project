@@ -6,6 +6,13 @@ import java.util.Map;
 /**
  * A factory class for creating and providing entity inputters.
  * Maintains a mapping between entity types and their corresponding inputters.
+ * <p>
+ * <b>Thread safety:</b> the static map {@link #LOADERS} is initialized once and is safe for
+ * concurrent read access. However, the inputter instances themselves (e.g., {@link AnimalInputter},
+ * {@link BarrelInputter}, {@link HumanInputter}) are <b>not fully thread-safe</b> for parallel
+ * console input. To prevent conflicts during simultaneous input from multiple threads, it is
+ * necessary to synchronize or use a lock (e.g., {@link java.util.concurrent.locks.ReentrantLock})
+ * when calling their input methods.
  */
 public class InputterFactory {
 
