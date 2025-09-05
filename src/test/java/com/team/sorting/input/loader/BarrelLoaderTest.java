@@ -1,7 +1,5 @@
-package com.team.sorting.loader;
+package com.team.sorting.input.loader;
 
-import com.team.sorting.input.loader.BarrelLoader;
-import com.team.sorting.input.loader.EntityLoader;
 import com.team.sorting.model.Barrel;
 import org.junit.jupiter.api.Test;
 

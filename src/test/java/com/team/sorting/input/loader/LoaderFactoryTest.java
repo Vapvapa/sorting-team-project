@@ -1,6 +1,5 @@
-package com.team.sorting.loader;
+package com.team.sorting.input.loader;
 
-import com.team.sorting.input.loader.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
