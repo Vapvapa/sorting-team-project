@@ -1,78 +1,104 @@
 package com.team.sorting.app;
 
-import com.team.sorting.input.generator.EntityGenerator;
-import com.team.sorting.input.generator.GeneratorFactory;
-import com.team.sorting.input.loader.EntityLoader;
-import com.team.sorting.input.loader.LoaderFactory;
-import com.team.sorting.model.Animal;
-import com.team.sorting.model.Barrel;
-import com.team.sorting.model.Human;
-import com.team.sorting.sort.InsertionSort;
-
 import java.util.List;
-import java.util.Comparator;
+import java.util.Scanner;
 
+/**
+ * Main application entry point for managing entities (Animal, Barrel, Human).
+ * Uses {@link HandlerStrategy} to obtain the correct {@link EntityHandler} implementation
+ * for the selected entity type.
+ */
 public class Main {
 
+    /**
+     * The main method that runs the console-based application.
+     *
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args) {
-        EntityGenerator<Animal> animalGen = GeneratorFactory.getGenerator(GeneratorFactory.EntityType.ANIMAL);
-        List<Animal> randomAnimals = animalGen.generate(5);
-        System.out.println("\nAnimals:");
-        randomAnimals.forEach(System.out::println);
+        Scanner scanner = new Scanner(System.in);
 
-        EntityGenerator<Barrel> barrelGen = GeneratorFactory.getGenerator(GeneratorFactory.EntityType.BARREL);
-        List<Barrel> randomBarrels = barrelGen.generate(5);
-        System.out.println("\nBarrels:");
-        randomBarrels.forEach(System.out::println);
+        while (true) {
+            System.out.println("Choose entity type:");
+            System.out.println("0. Exit");
+            System.out.println("1. Animal");
+            System.out.println("2. Barrel");
+            System.out.println("3. Human");
+            System.out.print("Your choice: ");
 
-        EntityGenerator<Human> humanGen = GeneratorFactory.getGenerator(GeneratorFactory.EntityType.HUMAN);
-        List<Human> randomHumans = humanGen.generate(5);
-        System.out.println("\nHumans:");
-        randomHumans.forEach(System.out::println);
+            String entityChoiceStr = scanner.nextLine().trim();
+            int entityChoice;
+            try {
+                entityChoice = Integer.parseInt(entityChoiceStr);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid choice: " + entityChoiceStr);
+                continue;
+            }
 
-        EntityLoader<Animal> animalLoader = LoaderFactory.getLoader(LoaderFactory.EntityType.ANIMAL);
-        List<Animal> animalsFromFile = animalLoader.load("com/team/sorting/loader/testAnimalLoader.txt");
-        System.out.println("\nLoaded Animals:");
-        animalsFromFile.forEach(System.out::println);
+            if (entityChoice == 0) {
+                System.out.println("Goodbye!");
+                break;
+            }
 
-        EntityLoader<Barrel> barrelLoader = LoaderFactory.getLoader(LoaderFactory.EntityType.BARREL);
-        List<Barrel> barrelsFromFile = barrelLoader.load("com/team/sorting/loader/testBarrelLoader.txt");
-        System.out.println("\nLoaded Barrels:");
-        barrelsFromFile.forEach(System.out::println);
+            HandlerStrategy.HandlerType entityType;
+            switch (entityChoice) {
+                case 1 -> entityType = HandlerStrategy.HandlerType.ANIMAL;
+                case 2 -> entityType = HandlerStrategy.HandlerType.BARREL;
+                case 3 -> entityType = HandlerStrategy.HandlerType.HUMAN;
+                default -> {
+                    System.out.println("Invalid choice: " + entityChoice);
+                    continue;
+                }
+            }
 
-        EntityLoader<Human> humanLoader = LoaderFactory.getLoader(LoaderFactory.EntityType.HUMAN);
-        List<Human> humanFromFile = humanLoader.load("com/team/sorting/loader/testHumanLoader.txt");
-        System.out.println("\nLoaded Human:");
-        humanFromFile.forEach(System.out::println);
+            EntityHandler<Object> handler = HandlerStrategy.getHandler(entityType);
+            if (handler == null) {
+                System.out.println("Invalid choice: " + entityChoice);
+                continue;
+            }
 
-//        EntityInputter<Animal> animalInputter = InputterFactory.getLoader(InputterFactory.EntityType.ANIMAL);
-//        List<Animal> animalFromConsole = animalInputter.input(2);
-//        System.out.println("\nRead Animals:");
-//        animalFromConsole.forEach(System.out::println);
-//
-//        EntityInputter<Barrel> barrelInputter = InputterFactory.getLoader(InputterFactory.EntityType.BARREL);
-//        List<Barrel> barrelFromConsole = barrelInputter.input(2);
-//        System.out.println("\nRead Barrels:");
-//        barrelFromConsole.forEach(System.out::println);
-//
-//        EntityInputter<Human> humanInputter = InputterFactory.getLoader(InputterFactory.EntityType.HUMAN);
-//        List<Human> humanFromConsole = humanInputter.input(2);
-//        System.out.println("\nRead People:");
-//        humanFromConsole.forEach(System.out::println);
+            System.out.println("\nChoose input method:");
+            System.out.println("1. Load from file");
+            System.out.println("2. Generate automatically");
+            System.out.println("3. Manual input");
+            System.out.print("Your choice: ");
 
-        InsertionSort<Animal> sorter = new InsertionSort<>();
-        List<Animal> sortedAnimals = sorter.sort(randomAnimals, Comparator.naturalOrder());
-        System.out.println("\nSorted animals:");
-        sortedAnimals.forEach(System.out::println);
+            String inputChoiceStr = scanner.nextLine().trim();
+            int inputChoice;
+            try {
+                inputChoice = Integer.parseInt(inputChoiceStr);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input method.");
+                continue;
+            }
 
-        InsertionSort<Barrel> barrelSorter = new InsertionSort<>();
-        List<Barrel> sortedBarrels = barrelSorter.sort(randomBarrels, Comparator.naturalOrder());
-        System.out.println("\nSorted barrels:");
-        sortedBarrels.forEach(System.out::println);
+            System.out.print("Enter number of entities to load/generate/input: ");
+            String sizeStr = scanner.nextLine().trim();
+            int size;
+            try {
+                size = Integer.parseInt(sizeStr);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid size: " + sizeStr);
+                continue;
+            }
+            if (size <= 0) {
+                System.out.println("Invalid size: must be positive.");
+                continue;
+            }
 
-        InsertionSort<Human> humanSorter = new InsertionSort<>();
-        List<Human> sortedHumans = humanSorter.sort(randomHumans, Comparator.naturalOrder());
-        System.out.println("\nSorted humans:");
-        sortedHumans.forEach(System.out::println);
+            List<Object> entities;
+            try {
+                entities = handler.loadEntities(inputChoice, size, scanner);
+            } catch (IllegalArgumentException ex) {
+                System.out.println("Invalid input method.");
+                continue;
+            }
+
+            handler.searchAndPrint(entities, scanner);
+
+            System.out.println();
+        }
+
+        scanner.close();
     }
 }

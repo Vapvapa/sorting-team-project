@@ -172,10 +172,10 @@ public class Barrel implements Comparable<Barrel> {
     public String toString() {
         lock.lock();
         try {
-            return "Бочка: " +
-                    "объём " + volume + "л, " +
-                    (storedMaterial != null ? "содержит " + storedMaterial + ", " : "") +
-                    (material != null ? "материал изготовителя " + material : "");
+            return "Barrel: " +
+                    "volume " + volume + "L, " +
+                    (storedMaterial != null ? "contains " + storedMaterial + ", " : "") +
+                    (material != null ? "made of " + material : "");
         } finally {
             lock.unlock();
         }
