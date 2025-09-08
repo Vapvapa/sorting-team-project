@@ -180,28 +180,39 @@ public class Animal implements Comparable<Animal> {
     }
 
     /**
-     * Defines natural ordering:
-     * <ul>
-     *   <li>First by species</li>
-     *   <li>Then by eye color</li>
-     *   <li>Then by fur</li>
-     *   <li>Then by eats bun</li>
-     * </ul>
+     * Compares two nullable objects safely.
+     * <p>
+     * Null is considered less than any non-null value.
+     *
+     * @param <T> the type of objects to compare
+     * @param o1  first object
+     * @param o2  second object
+     * @return negative if o1 < o2, 0 if equal, positive if o1 > o2
+     */
+    public static <T extends Comparable<T>> int compareNullable(T o1, T o2) {
+        if (o1 == null && o2 == null) return 0;
+        if (o1 == null) return -1;
+        if (o2 == null) return 1;
+        return o1.compareTo(o2);
+    }
+
+    /**
+     * Defines natural ordering: species → eyeColor → fur → eatsBun.
      *
      * @param other the other animal to compare with
-     * @return negative if this is less, positive if greater, zero if equal
+     * @return negative if this < other, 0 if equal, positive if this > other
      */
     @Override
     public int compareTo(Animal other) {
         if (other == null) return 1;
 
-        int cmp = this.species.compareTo(other.species);
+        int cmp = compareNullable(this.species, other.species);
         if (cmp != 0) return cmp;
 
-        cmp = this.eyeColor.compareTo(other.eyeColor);
+        cmp = compareNullable(this.eyeColor, other.eyeColor);
         if (cmp != 0) return cmp;
 
-        cmp = this.fur.compareTo(other.fur);
+        cmp = compareNullable(this.fur, other.fur);
         if (cmp != 0) return cmp;
 
         return Boolean.compare(this.eatsBun, other.eatsBun);
@@ -217,12 +228,12 @@ public class Animal implements Comparable<Animal> {
     public String toString() {
         lock.lock();
         try {
-            return "Животное: " +
+            return "Animal: " +
                     (species != null ? species + ", " : "") +
-                    (eyeColor != null ? "глаза " + eyeColor + ", " : "") +
-                    (fur != null ? "шерсть " + fur + ", " : "") +
-                    (eatsBun ? "любит булку, " : "не любит булку, ") +
-                    "готово к жизни!";
+                    (eyeColor != null ? "eyes " + eyeColor + ", " : "") +
+                    (fur != null ? "fur " + fur + ", " : "") +
+                    (eatsBun ? "likes buns, " : "does not like buns, ") +
+                    "ready for life!";
         } finally {
             lock.unlock();
         }

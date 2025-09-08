@@ -171,10 +171,10 @@ public class Human implements Comparable<Human> {
     public String toString() {
         lock.lock();
         try {
-            return "Человек: " +
+            return "Human: " +
                     (gender != null ? gender + ", " : "") +
-                    "возраст " + age + ", " +
-                    (lastName != null ? "фамилия " + lastName : "");
+                    "age " + age + ", " +
+                    (lastName != null ? "last name " + lastName : "");
         } finally {
             lock.unlock();
         }

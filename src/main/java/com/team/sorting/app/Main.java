@@ -4,75 +4,166 @@ import com.team.sorting.input.generator.EntityGenerator;
 import com.team.sorting.input.generator.GeneratorFactory;
 import com.team.sorting.input.loader.EntityLoader;
 import com.team.sorting.input.loader.LoaderFactory;
+import com.team.sorting.input.inputter.EntityInputter;
+import com.team.sorting.input.inputter.InputterFactory;
 import com.team.sorting.model.Animal;
-import com.team.sorting.model.Barrel;
-import com.team.sorting.model.Human;
+import com.team.sorting.search.BinarySearch;
+import com.team.sorting.search.FindElementsInCollection;
 import com.team.sorting.sort.InsertionSort;
 
-import java.util.List;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        EntityGenerator<Animal> animalGen = GeneratorFactory.getGenerator(GeneratorFactory.EntityType.ANIMAL);
-        List<Animal> randomAnimals = animalGen.generate(5);
-        System.out.println("\nAnimals:");
-        randomAnimals.forEach(System.out::println);
+        Scanner scanner = new Scanner(System.in);
+        boolean exit = false;
 
-        EntityGenerator<Barrel> barrelGen = GeneratorFactory.getGenerator(GeneratorFactory.EntityType.BARREL);
-        List<Barrel> randomBarrels = barrelGen.generate(5);
-        System.out.println("\nBarrels:");
-        randomBarrels.forEach(System.out::println);
+        while (!exit) {
+            System.out.println("\nSelect entity type: 1 - Animal, 2 - Barrel, 3 - Human, 0 - Exit");
+            int entityChoice = scanner.nextInt();
+            scanner.nextLine(); // consume newline
 
-        EntityGenerator<Human> humanGen = GeneratorFactory.getGenerator(GeneratorFactory.EntityType.HUMAN);
-        List<Human> randomHumans = humanGen.generate(5);
-        System.out.println("\nHumans:");
-        randomHumans.forEach(System.out::println);
+            if (entityChoice == 0) {
+                exit = true;
+                continue;
+            }
 
-        EntityLoader<Animal> animalLoader = LoaderFactory.getLoader(LoaderFactory.EntityType.ANIMAL);
-        List<Animal> animalsFromFile = animalLoader.load("com/team/sorting/loader/testAnimalLoader.txt");
-        System.out.println("\nLoaded Animals:");
-        animalsFromFile.forEach(System.out::println);
+            System.out.println("Select input method: 1 - From file, 2 - Random, 3 - Input from console");
+            int inputChoice = scanner.nextInt();
+            scanner.nextLine();
 
-        EntityLoader<Barrel> barrelLoader = LoaderFactory.getLoader(LoaderFactory.EntityType.BARREL);
-        List<Barrel> barrelsFromFile = barrelLoader.load("com/team/sorting/loader/testBarrelLoader.txt");
-        System.out.println("\nLoaded Barrels:");
-        barrelsFromFile.forEach(System.out::println);
+            System.out.print("Enter collection size: ");
+            int size = scanner.nextInt();
+            scanner.nextLine();
 
-        EntityLoader<Human> humanLoader = LoaderFactory.getLoader(LoaderFactory.EntityType.HUMAN);
-        List<Human> humanFromFile = humanLoader.load("com/team/sorting/loader/testHumanLoader.txt");
-        System.out.println("\nLoaded Human:");
-        humanFromFile.forEach(System.out::println);
+            switch (entityChoice) {
+                case 1 -> handleAnimal(inputChoice, size, scanner);
+                case 2 -> handleBarrel(inputChoice, size, scanner);
+                case 3 -> handleHuman(inputChoice, size, scanner);
+                default -> System.out.println("Invalid choice. Try again.");
+            }
+        }
 
-//        EntityInputter<Animal> animalInputter = InputterFactory.getLoader(InputterFactory.EntityType.ANIMAL);
-//        List<Animal> animalFromConsole = animalInputter.input(2);
-//        System.out.println("\nRead Animals:");
-//        animalFromConsole.forEach(System.out::println);
-//
-//        EntityInputter<Barrel> barrelInputter = InputterFactory.getLoader(InputterFactory.EntityType.BARREL);
-//        List<Barrel> barrelFromConsole = barrelInputter.input(2);
-//        System.out.println("\nRead Barrels:");
-//        barrelFromConsole.forEach(System.out::println);
-//
-//        EntityInputter<Human> humanInputter = InputterFactory.getLoader(InputterFactory.EntityType.HUMAN);
-//        List<Human> humanFromConsole = humanInputter.input(2);
-//        System.out.println("\nRead People:");
-//        humanFromConsole.forEach(System.out::println);
+        System.out.println("Program exited.");
+    }
 
+    private static void handleAnimal(int inputChoice, int size, Scanner scanner) {
+        List<Animal> animals;
+
+        switch (inputChoice) {
+            case 1 -> {
+                EntityLoader<Animal> loader = LoaderFactory.getLoader(LoaderFactory.EntityType.ANIMAL);
+                animals = loader.load("com/team/sorting/loader/testAnimalLoader.txt");
+            }
+            case 2 -> {
+                EntityGenerator<Animal> generator = GeneratorFactory.getGenerator(GeneratorFactory.EntityType.ANIMAL);
+                animals = generator.generate(size);
+            }
+            case 3 -> {
+                EntityInputter<Animal> inputter = InputterFactory.getLoader(InputterFactory.EntityType.ANIMAL);
+                animals = inputter.input(size);
+            }
+            default -> {
+                System.out.println("Invalid input method.");
+                return;
+            }
+        }
+
+        System.out.println("\nOriginal Animals:");
+        animals.forEach(System.out::println);
+
+        // Sorting
         InsertionSort<Animal> sorter = new InsertionSort<>();
-        List<Animal> sortedAnimals = sorter.sort(randomAnimals, Comparator.naturalOrder());
-        System.out.println("\nSorted animals:");
-        sortedAnimals.forEach(System.out::println);
+        List<Animal> sorted = sorter.sort(animals, Comparator.naturalOrder());
+        System.out.println("\nSorted Animals:");
+        sorted.forEach(System.out::println);
 
-        InsertionSort<Barrel> barrelSorter = new InsertionSort<>();
-        List<Barrel> sortedBarrels = barrelSorter.sort(randomBarrels, Comparator.naturalOrder());
-        System.out.println("\nSorted barrels:");
-        sortedBarrels.forEach(System.out::println);
+        // Searching
+        System.out.println("\nEnter search key (exact values only):");
+        System.out.println("Format: Species EyeColor Fur EatsBun");
+        System.out.println("Example: CAT BROWN SHORT true");
+        System.out.println("Available values:");
+        System.out.println("Species: " + java.util.Arrays.toString(Animal.Species.values()));
+        System.out.println("EyeColor: " + java.util.Arrays.toString(Animal.EyeColor.values()));
+        System.out.println("Fur: " + java.util.Arrays.toString(Animal.Fur.values()));
+        System.out.println("EatsBun: true, false");
+        System.out.print("Enter key: ");
 
-        InsertionSort<Human> humanSorter = new InsertionSort<>();
-        List<Human> sortedHumans = humanSorter.sort(randomHumans, Comparator.naturalOrder());
-        System.out.println("\nSorted humans:");
-        sortedHumans.forEach(System.out::println);
+        String input = scanner.nextLine().trim();
+        String[] parts = input.split("\\s+");
+
+        if (parts.length != 4) {
+            System.out.println("Invalid format. Please enter exactly 4 values separated by spaces.");
+            return;
+        }
+
+        Animal.Species speciesCriteria;
+        Animal.EyeColor eyeColorCriteria;
+        Animal.Fur furCriteria;
+        boolean eatsBunCriteria;
+
+        try {
+            speciesCriteria = Animal.Species.valueOf(parts[0].toUpperCase());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid species: " + parts[0]);
+            return;
+        }
+        try {
+            eyeColorCriteria = Animal.EyeColor.valueOf(parts[1].toUpperCase());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid eye color: " + parts[1]);
+            return;
+        }
+        try {
+            furCriteria = Animal.Fur.valueOf(parts[2].toUpperCase());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid fur: " + parts[2]);
+            return;
+        }
+        if (parts[3].equalsIgnoreCase("true")) {
+            eatsBunCriteria = true;
+        } else if (parts[3].equalsIgnoreCase("false")) {
+            eatsBunCriteria = false;
+        } else {
+            System.out.println("Invalid eats bun value: " + parts[3]);
+            return;
+        }
+
+        // Binary search
+        Animal key = new Animal.Builder()
+                .species(speciesCriteria)
+                .eyeColor(eyeColorCriteria)
+                .fur(furCriteria)
+                .eatsBun(eatsBunCriteria)
+                .build();
+
+        BinarySearch<Animal> binarySearch = new BinarySearch<>();
+        int idx = binarySearch.search(sorted, key);
+        if (idx >= 0) {
+            System.out.println("Found at index " + idx + ": " + sorted.get(idx));
+        } else {
+            System.out.println("No animals found matching the criteria.");
+        }
+
+        // FindElementsInCollection
+        System.out.print("\nEnter value for global search across all collections: ");
+        String globalSearchValue = scanner.nextLine();
+
+        // There are only animals, so we pass empty lists for Barrel and Human
+        FindElementsInCollection.countersOfElements(
+                animals, globalSearchValue,
+                List.of(), globalSearchValue,
+                List.of(), globalSearchValue
+        );
+    }
+
+    private static void handleBarrel(int inputChoice, int size, Scanner scanner) {
+
+    }
+
+    private static void handleHuman(int inputChoice, int size, Scanner scanner) {
     }
 }
