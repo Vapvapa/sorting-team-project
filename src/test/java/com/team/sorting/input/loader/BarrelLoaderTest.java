@@ -35,7 +35,7 @@ class BarrelLoaderTest {
         Files.writeString(tempFile,
                 "200,OIL,WOOD\n" +     // valid
                 "300,OIL\n" +          // invalid (only 2 fields)
-                "150,WATER,STEEL\n"    // valid
+                "150,WATER,METAL\n"    // valid
         );
 
         EntityLoader<Barrel> loader = new BarrelLoader();
@@ -54,7 +54,7 @@ class BarrelLoaderTest {
         Files.writeString(tempFile,
                 "200,OIL,WOOD\n" +    // valid
                 "abc,OIL,WOOD\n" +    // invalid (volume is not a number)
-                "150,WATER,STEEL\n"   // valid
+                "150,WATER,METAL\n"   // valid
         );
 
         EntityLoader<Barrel> loader = new BarrelLoader();

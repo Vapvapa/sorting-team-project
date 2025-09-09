@@ -2,10 +2,6 @@ package com.team.sorting.input.loader;
 
 import com.team.sorting.model.Barrel;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A loader class responsible for reading and parsing Barrel objects from a file.
@@ -17,36 +13,6 @@ import java.util.List;
  * 750, WINE, METAL
  */
 public class BarrelLoader extends AbstractLoader<Barrel> {
-
-    /**
-     * Reads a file from the specified resource path and converts its contents
-     * into a list of Barrel objects.
-     * Invalid lines in the file are skipped and logged to standard error.
-     *
-     * @param resourcePath The path to the file containing barrel data.
-     * @return A list of valid Barrel objects parsed from the file.
-     * @throws RuntimeException if an I/O error occurs while reading the file.
-     */
-    @Override
-    public List<Barrel> load(String resourcePath) {
-        List<Barrel> barrels = new ArrayList<>();
-
-        try (BufferedReader br = getBufferedReader(resourcePath)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                try {
-                    Barrel barrel = parseLine(line);
-                    if (barrel != null) barrels.add(barrel);
-                } catch (Exception e) {
-                    System.err.println("Skipping an invalid line: " + line);
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Error reading the file: " + resourcePath, e);
-        }
-
-        return barrels;
-    }
 
     /**
      * Parses a single line of text into a Barrel object.

@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Base class for entity loaders. It removes code duplication for file reading.
@@ -17,6 +19,32 @@ import java.nio.file.Path;
  * on its concrete implementation and any shared mutable state it may access.
  */
 public abstract class AbstractLoader<T> implements EntityLoader<T> {
+
+    /**
+     * Loads entities from the given resource path using a stream-based pipeline.
+     * Invalid lines are skipped with an error message to stderr.
+     *
+     * @param resourcePath The path to the input resource or file.
+     * @return List of parsed entities.
+     */
+    @Override
+    public List<T> load(String resourcePath) {
+        try (BufferedReader bufferedReader = getBufferedReader(resourcePath)) {
+            return bufferedReader.lines()
+                    .map(line -> {
+                        try {
+                            return parseLine(line);
+                        } catch (Exception e) {
+                            System.err.println("Skipping an invalid line: " + line);
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .toList();
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading the file: " + resourcePath, e);
+        }
+    }
 
     /**
      * Parses a line for a specific entity.

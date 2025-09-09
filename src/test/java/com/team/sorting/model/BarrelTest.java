@@ -101,8 +101,8 @@ class BarrelTest {
                 .build();
 
         String str = barrel.toString();
-        assertTrue(str.contains("объём 200"));
-        assertTrue(str.contains("содержит OIL"));
-        assertTrue(str.contains("материал изготовителя METAL"));
+        assertTrue(str.contains("volume 200"));
+        assertTrue(str.contains("contains OIL"));
+        assertTrue(str.contains("made of METAL"));
     }
 }

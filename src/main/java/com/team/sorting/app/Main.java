@@ -55,7 +55,7 @@ public class Main {
                 }
             }
 
-            EntityHandler<Object> handler = HandlerStrategy.getHandler(entityType);
+            EntityHandler<?> handler = HandlerStrategy.getHandler(entityType);
             if (handler == null) {
                 System.out.println("Invalid choice: " + entityChoice);
                 continue;
@@ -90,19 +90,33 @@ public class Main {
                 continue;
             }
 
-            List<Object> entities;
-            try {
-                entities = handler.loadEntities(inputChoice, size, scanner);
-            } catch (IllegalArgumentException ex) {
-                System.out.println("Invalid input method.");
-                continue;
-            }
-
-            handler.searchAndPrint(entities, scanner);
+            executeHandler(handler, inputChoice, size, scanner);
 
             System.out.println();
         }
 
         scanner.close();
+    }
+
+    /**
+     * Executes the given {@link EntityHandler} by loading entities based on the selected input method,
+     * and then performing a search and printing results.
+     *
+     * @param entityHandler the handler responsible for managing a specific entity type
+     * @param inputChoice   the chosen input method (1 - load from file, 2 - generate, 3 - manual input)
+     * @param size          the number of entities to load, generate, or input
+     * @param scanner       the {@link Scanner} used for reading user input
+     * @param <T>           the type of entities managed by the handler
+     */
+    private static <T> void executeHandler(EntityHandler<T> entityHandler, int inputChoice, int size, Scanner scanner) {
+        List<T> entities;
+        try {
+            entities = entityHandler.loadEntities(inputChoice, size, scanner);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Invalid input method.");
+            return;
+        }
+
+        entityHandler.searchAndPrint(entities, scanner);
     }
 }

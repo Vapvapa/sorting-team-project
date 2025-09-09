@@ -113,8 +113,9 @@ class AnimalTest {
 
         String str = animal.toString();
         assertTrue(str.contains("RABBIT"));
-        assertTrue(str.contains("глаза YELLOW"));
-        assertTrue(str.contains("шерсть NONE"));
-        assertTrue(str.contains("любит булку"));
+        assertTrue(str.contains("eyes YELLOW"));
+        assertTrue(str.contains("fur NONE"));
+        assertTrue(str.contains("likes buns"));
+        assertTrue(str.contains("ready for life!"));
     }
 }
