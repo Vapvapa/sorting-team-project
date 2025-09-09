@@ -1,5 +1,6 @@
 package com.team.sorting.app;
 
+import com.team.sorting.writeToFile.FileRecorder;
 import com.team.sorting.input.generator.EntityGenerator;
 import com.team.sorting.input.generator.GeneratorFactory;
 import com.team.sorting.input.inputter.EntityInputter;
@@ -81,12 +82,14 @@ public class AnimalHandler implements EntityHandler<Animal> {
     public void searchAndPrint(List<Animal> animals, Scanner scanner) {
         System.out.println("\nOriginal Animals:");
         animals.forEach(System.out::println);
+        FileRecorder.writeCollectionToFile(animals, "output.txt");
 
         // Sorting
         InsertionSort<Animal> sorter = new InsertionSort<>();
         List<Animal> sorted = sorter.sort(animals, Comparator.naturalOrder());
         System.out.println("\nSorted Animals:");
         sorted.forEach(System.out::println);
+        FileRecorder.writeCollectionToFile(sorted, "output.txt");
 
         // Searching
         System.out.println("\nEnter search key (exact values only):");

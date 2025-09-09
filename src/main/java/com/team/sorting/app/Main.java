@@ -1,5 +1,6 @@
 package com.team.sorting.app;
 
+import com.team.sorting.writeToFile.FileRecorder;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,6 +18,9 @@ public class Main {
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        // Clear output file at the start of the application
+        FileRecorder.clearFile("output.txt");
 
         while (true) {
             System.out.println("Choose entity type:");

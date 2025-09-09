@@ -1,5 +1,6 @@
 package com.team.sorting.app;
 
+import com.team.sorting.writeToFile.FileRecorder;
 import com.team.sorting.input.generator.EntityGenerator;
 import com.team.sorting.input.generator.GeneratorFactory;
 import com.team.sorting.input.inputter.EntityInputter;
@@ -78,12 +79,14 @@ public class BarrelHandler implements EntityHandler<Barrel> {
     public void searchAndPrint(List<Barrel> barrels, Scanner scanner) {
         System.out.println("\nOriginal Barrels:");
         barrels.forEach(System.out::println);
+        FileRecorder.writeCollectionToFile(barrels, "output.txt");
 
         // Sorting
         InsertionSort<Barrel> sorter = new InsertionSort<>();
         List<Barrel> sorted = sorter.sort(barrels, Comparator.naturalOrder());
         System.out.println("\nSorted Barrels:");
         sorted.forEach(System.out::println);
+        FileRecorder.writeCollectionToFile(sorted, "output.txt");
 
         // Searching
         System.out.println("\nEnter search key (exact values only):");
