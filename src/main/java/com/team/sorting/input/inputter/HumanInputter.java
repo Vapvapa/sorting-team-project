@@ -2,8 +2,10 @@ package com.team.sorting.input.inputter;
 
 import com.team.sorting.model.Human;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Stream;
 
 /**
  * An inputter class responsible for reading {@link Human} objects from the console.
@@ -38,9 +40,14 @@ public class HumanInputter extends AbstractInputter<Human> {
         try {
             System.out.println("Enter Human as: gender age lastName (e.g., MALE 25 Smith)");
 
-            String genderStr = scanner.next();
-            int age = Integer.parseInt(scanner.next());
-            String lastName = scanner.next();
+            List<String> tokens = Stream.generate(scanner::next)
+                    .limit(3)
+                    .map(String::trim)
+                    .toList();
+
+            String genderStr = tokens.get(0);
+            int age = Integer.parseInt(tokens.get(1));
+            String lastName = tokens.get(2);
 
             Human.Gender gender = Human.Gender.valueOf(genderStr.trim().toUpperCase());
 

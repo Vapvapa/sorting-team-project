@@ -2,8 +2,10 @@ package com.team.sorting.input.inputter;
 
 import com.team.sorting.model.Barrel;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Stream;
 
 /**
  * An inputter class responsible for reading {@link Barrel} objects from the console.
@@ -38,9 +40,14 @@ public class BarrelInputter extends AbstractInputter<Barrel> {
         try {
             System.out.println("Enter Barrel as: volume storedMaterial material (e.g., 200 OIL WOOD)");
 
-            int volume = Integer.parseInt(scanner.next());
-            String storedMaterialStr = scanner.next();
-            String materialStr = scanner.next();
+            List<String> tokens = Stream.generate(scanner::next)
+                    .limit(3)
+                    .map(String::trim)
+                    .toList();
+
+            int volume = Integer.parseInt(tokens.get(0));
+            String storedMaterialStr = tokens.get(1);
+            String materialStr = tokens.get(2);
 
             Barrel.StoredMaterial storedMaterial = Barrel.StoredMaterial.valueOf(storedMaterialStr.trim().toUpperCase());
             Barrel.Material material = Barrel.Material.valueOf(materialStr.trim().toUpperCase());

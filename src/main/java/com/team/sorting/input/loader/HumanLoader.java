@@ -2,10 +2,6 @@ package com.team.sorting.input.loader;
 
 import com.team.sorting.model.Human;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A loader class responsible for reading and parsing Human objects from a file.
@@ -17,36 +13,6 @@ import java.util.List;
  * FEMALE, 30, JOHNSON
  */
 public class HumanLoader extends AbstractLoader<Human> {
-
-    /**
-     * Reads a file from the specified resource path and converts its contents
-     * into a list of Human objects.
-     * Invalid lines in the file are skipped and logged to standard error.
-     *
-     * @param resourcePath The path to the file containing human data.
-     * @return A list of valid Human objects parsed from the file.
-     * @throws RuntimeException if an I/O error occurs while reading the file.
-     */
-    @Override
-    public List<Human> load(String resourcePath) {
-        List<Human> humans = new ArrayList<>();
-
-        try (BufferedReader br = getBufferedReader(resourcePath)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                try {
-                    Human human = parseLine(line);
-                    if (human != null) humans.add(human);
-                } catch (Exception e) {
-                    System.err.println("Skipping an invalid line: " + line);
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Error reading the file: " + resourcePath, e);
-        }
-
-        return humans;
-    }
 
     /**
      * Parses a single line of text into a Human object.

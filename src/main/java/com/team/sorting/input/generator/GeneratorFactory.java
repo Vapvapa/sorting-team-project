@@ -20,7 +20,6 @@ public class GeneratorFactory {
      */
     private static final Map<EntityType, EntityGenerator<?>> GENERATORS = new EnumMap<>(EntityType.class);
 
-    // Static initialization of generators
     static {
         GENERATORS.put(EntityType.ANIMAL, new AnimalGenerator());
         GENERATORS.put(EntityType.BARREL, new BarrelGenerator());

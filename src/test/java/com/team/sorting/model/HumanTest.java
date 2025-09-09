@@ -117,7 +117,7 @@ class HumanTest {
 
         String str = human.toString();
         assertTrue(str.contains("FEMALE"));
-        assertTrue(str.contains("возраст 27"));
-        assertTrue(str.contains("фамилия Smirnova"));
+        assertTrue(str.contains("age 27"));
+        assertTrue(str.contains("last name Smirnova"));
     }
 }

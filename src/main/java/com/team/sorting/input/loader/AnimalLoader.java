@@ -2,10 +2,6 @@ package com.team.sorting.input.loader;
 
 import com.team.sorting.model.Animal;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A loader class responsible for reading and parsing Animal objects from a file.
@@ -17,36 +13,6 @@ import java.util.List;
  * CAT, GREEN, LONG, false
  */
 public class AnimalLoader extends AbstractLoader<Animal> {
-
-    /**
-     * Reads a file from the specified resource path and converts its contents
-     * into a list of Animal objects.
-     * Invalid lines in the file are skipped and logged to standard error.
-     *
-     * @param resourcePath The path to the file containing animal data.
-     * @return A list of valid Animal objects parsed from the file.
-     * @throws RuntimeException if an I/O error occurs while reading the file.
-     */
-    @Override
-    public List<Animal> load(String resourcePath) {
-        List<Animal> animals = new ArrayList<>();
-
-        try (BufferedReader br = getBufferedReader(resourcePath)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                try {
-                    Animal animal = parseLine(line);
-                    if (animal != null) animals.add(animal);
-                } catch (Exception e) {
-                    System.err.println("Skipping an invalid line: " + line);
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Error reading the file: " + resourcePath, e);
-        }
-
-        return animals;
-    }
 
     /**
      * Parses a single line of text into an Animal object.

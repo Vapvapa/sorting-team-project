@@ -55,7 +55,7 @@ class AnimalLoaderTest {
         Files.writeString(tempFile,
                 "DOG,BROWN,SHORT,true\n" + // valid
                 "CAT,BLUE,SHORT,YES\n" +   // invalid (YES instead of true/false)
-                "HORSE,RED,LONG,false\n"   // valid
+                "HORSE,GREEN,LONG,false\n"   // valid
         );
 
         EntityLoader<Animal> loader = new AnimalLoader();

@@ -2,8 +2,10 @@ package com.team.sorting.input.inputter;
 
 import com.team.sorting.model.Animal;
 
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 /**
  * An inputter class responsible for reading {@link Animal} objects from the console.
@@ -38,10 +40,15 @@ public class AnimalInputter extends AbstractInputter<Animal> {
         try {
             System.out.println("Enter Animal as: species eyeColor fur eatsBun (e.g., DOG BROWN SHORT true)");
 
-            String speciesStr = scanner.next();
-            String eyeColorStr = scanner.next();
-            String furStr = scanner.next();
-            String eatsBunStr = scanner.next();
+            List<String> tokens = Stream.generate(scanner::next)
+                    .limit(4)
+                    .map(String::trim)
+                    .toList();
+
+            String speciesStr = tokens.get(0);
+            String eyeColorStr = tokens.get(1);
+            String furStr = tokens.get(2);
+            String eatsBunStr = tokens.get(3);
 
             Animal.Species species = Animal.Species.valueOf(speciesStr.trim().toUpperCase());
             Animal.EyeColor eyeColor = Animal.EyeColor.valueOf(eyeColorStr.trim().toUpperCase());
