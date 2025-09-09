@@ -1,0 +1,12 @@
+Animal: CAT, eyes BROWN, fur SHORT, likes buns, ready for life!
+Animal: CAT, eyes BLUE, fur NONE, does not like buns, ready for life!
+Animal: HORSE, eyes BROWN, fur SHORT, does not like buns, ready for life!
+Animal: RABBIT, eyes BLUE, fur SHORT, likes buns, ready for life!
+Animal: CAT, eyes BROWN, fur LONG, does not like buns, ready for life!
+
+Animal: CAT, eyes BLUE, fur NONE, does not like buns, ready for life!
+Animal: CAT, eyes BROWN, fur SHORT, likes buns, ready for life!
+Animal: CAT, eyes BROWN, fur LONG, does not like buns, ready for life!
+Animal: HORSE, eyes BROWN, fur SHORT, does not like buns, ready for life!
+Animal: RABBIT, eyes BLUE, fur SHORT, likes buns, ready for life!
+
